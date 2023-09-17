@@ -1,9 +1,11 @@
+import { Request } from 'express';
+import { IConfig } from 'config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Request } from 'express';
-import { UserService } from 'src/modules/user/user.service';
+import { Inject, Injectable } from '@nestjs/common';
+
+import { UserService } from '@microservice-auth/module-user/user.service';
+import { CONFIG } from '@microservice-auth/module-config/config.provider';
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(
@@ -11,7 +13,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
   'jwt-refresh-token',
 ) {
   constructor(
-    private readonly configService: ConfigService,
+    @Inject(CONFIG) private readonly configService: IConfig,
     private readonly userService: UserService,
   ) {
     super({
@@ -20,7 +22,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
           return request?.cookies?.Refresh;
         },
       ]),
-      secretOrKey: configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      secretOrKey: configService.get('auth.jwt_refresh_token_secret'),
       passReqToCallback: true,
     });
   }

@@ -6,7 +6,7 @@ import {
   IsArray,
   IsEnum,
 } from 'class-validator';
-import { Roles } from 'src/entities/role.entity';
+import { Roles } from '@microservice-auth/entities';
 
 export class CreateUserDto {
   @IsEmail()

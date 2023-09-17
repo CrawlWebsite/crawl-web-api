@@ -1,7 +1,11 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { SeederModule } from './modules/seeder/seeder.module';
-import { SeederService } from './modules/seeder/seeder.service';
+
+import { SeederModule } from '@microservice-auth/module-seeder/seeder.module';
+import { SeederService } from '@microservice-auth/module-seeder/seeder.service';
 
 async function bootstrap() {
   NestFactory.createApplicationContext(SeederModule)

@@ -1,24 +1,18 @@
 import {
   Body,
-  Catch,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Patch,
-  Post,
   Query,
   Req,
-  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { AllExceptionsFilter } from '@auth-service/config/decorators';
-import { JwtAuthGuard } from '@auth-service/module-auth/guard';
+import { JwtAuthGuard } from '@microservice-auth/module-auth/guard';
 
-import { User } from '@auth-service/entity';
+import { User } from '@microservice-auth/entities';
 
 import UpdateUserDto from './dto/updateUser.dto';
 
@@ -47,7 +41,6 @@ export class UserController {
   }
 
   @Patch('/:userId')
-  @UseFilters(AllExceptionsFilter)
   @UseGuards(JwtAuthGuard)
   @ApiParam({
     name: 'userId',

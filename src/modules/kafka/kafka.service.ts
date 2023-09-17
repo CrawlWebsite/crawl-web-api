@@ -3,28 +3,32 @@ import {
   OnModuleInit,
   Injectable,
   UseFilters,
+  Inject,
 } from '@nestjs/common';
-import { Client, ClientKafka, Transport } from '@nestjs/microservices';
+import { IConfig } from 'config';
+import { ClientKafka } from '@nestjs/microservices';
 import { Observable, lastValueFrom } from 'rxjs';
-import { KAFKA_TOPIC } from './dto/types';
-import { AllExceptionsFilter } from 'src/configs/decorators/catchError';
-import { ConfigService } from '@nestjs/config';
+
+import { HttpExceptionsFilter } from '@microservice-auth/config-exceptions';
+import { CONFIG } from '@microservice-auth/module-config/config.provider';
+
+import { KAFKA_TOPIC_PRODUCER } from './dto/types';
 
 @Injectable()
-@UseFilters(AllExceptionsFilter)
+@UseFilters(HttpExceptionsFilter)
 export class KafkaService implements OnModuleInit, OnModuleDestroy {
   private client: ClientKafka;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(@Inject(CONFIG) private readonly configService: IConfig) {
     this.setUpKafaClient();
   }
 
   private setUpKafaClient() {
-    const clientId = this.configService.get<string>('KAFKA_CLIENT_ID');
-    const brokers = this.configService.get<string>('KAFKA_BROKERS').split(',');
-    const consumerId = this.configService.get<string>(
-      'KAFKA_CONFIG.CONSUMER_ID',
-    );
+    const clientId = this.configService.get<string>('kafka.kafka_client_id');
+    const brokers = this.configService
+      .get<string>('kafka.kafka_brokers')
+      .split(',');
+    const consumerId = this.configService.get<string>('kafka.consumer_id');
 
     this.client = new ClientKafka({
       client: {
@@ -42,7 +46,7 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
-    const requestPatterns = Object.values(KAFKA_TOPIC);
+    const requestPatterns = Object.values(KAFKA_TOPIC_PRODUCER);
 
     requestPatterns.forEach((pattern) => {
       this.client.subscribeToResponseOf(pattern);
@@ -56,7 +60,7 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
   }
 
   public async sendKafkaMessage(
-    topic: KAFKA_TOPIC,
+    topic: KAFKA_TOPIC_PRODUCER,
     key: string,
     data: any,
   ): Promise<Observable<any>> {
@@ -70,7 +74,7 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
   }
 
   async sendKafkaMessageWithoutKey(
-    topic: KAFKA_TOPIC,
+    topic: KAFKA_TOPIC_PRODUCER,
     data: any,
   ): Promise<Observable<any>> {
     const result = await lastValueFrom(

@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 
-import { User, Role } from '@auth-service/entity';
+import { User, Role } from '@microservice-auth/entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role])],

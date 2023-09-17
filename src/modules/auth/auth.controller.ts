@@ -8,13 +8,15 @@ import {
   UseGuards,
   Res,
   Get,
+  Inject,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { IConfig } from 'config';
 
 // Service
-import { UserService } from '@auth-service/module-user/user.service';
+import { UserService } from '@microservice-auth/module-user/user.service';
+import { CONFIG } from '@microservice-auth/module-config/config.provider';
 import { AuthService } from './auth.service';
 
 // Dto
@@ -26,16 +28,16 @@ import { JwtAuthGuard } from './guard/jwtAuth.guard';
 import { JwtRefreshGuard } from './guard/jwtRefresh.guard';
 
 // Entity
-import { User } from '@auth-service/entity';
+import { User } from '@microservice-auth/entities';
 
-@Controller('auth')
+@Controller()
 @ApiTags('Auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    @Inject(CONFIG) private readonly configService: IConfig,
   ) {}
 
   @Post('register')
@@ -86,6 +88,12 @@ export class AuthController {
       refreshTokenData.cookie,
     ]);
     return user;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('verify-token')
+  async verifyToken(@Req() request, @Res() response) {
+    response.sendStatus(200);
   }
 
   @HttpCode(200)

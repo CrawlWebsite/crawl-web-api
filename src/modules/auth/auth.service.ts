@@ -1,10 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { IConfig } from 'config';
 
-import { PostgresErrorCode } from '@auth-service/module-database/postgresErrorCodes.enum';
-
-import { UserService } from '@auth-service/module-user/user.service';
+import { CONFIG } from '@microservice-auth/module-config/config.provider';
+import { PostgresErrorCode } from '@microservice-auth/module-database/postgresErrorCodes.enum';
+import { UserService } from '@microservice-auth/module-user/user.service';
 
 import { RegisterDto } from './dto/register.dto';
 
@@ -16,7 +16,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    @Inject(CONFIG) private readonly configService: IConfig,
   ) {}
 
   public async register(registrationData: RegisterDto) {
@@ -72,11 +72,11 @@ export class AuthService {
   public getCookieWithJwtAccessToken(userId: number) {
     const payload: TokenPayload = { userId };
     const token = this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_SECRET'),
-      expiresIn: `${this.configService.get('JWT_EXPIRATION_TIME')}s`,
+      secret: this.configService.get('auth.jwt_secret'),
+      expiresIn: `${this.configService.get('auth.jwt_expiration_time')}s`,
     });
     const cookie = `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      'auth.jwt_expiration_time',
     )}`;
     return {
       cookie,
@@ -87,13 +87,13 @@ export class AuthService {
   public getCookieWithJwtRefreshToken(userId: number) {
     const payload: TokenPayload = { userId };
     const token = this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      secret: this.configService.get('auth.jwt_refresh_token_secret'),
       expiresIn: `${this.configService.get(
-        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+        'auth.jwt_refresh_token_expiration_time',
       )}s`,
     });
     const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+      'auth.jwt_refresh_token_expiration_time',
     )}`;
     return {
       cookie,

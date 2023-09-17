@@ -8,13 +8,13 @@ import {
 import { HttpAdapterHost } from '@nestjs/core';
 
 @Catch()
-export class AllExceptionsFilter implements ExceptionFilter {
+export class HttpExceptionsFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
-  catch(exception: unknown, host: ArgumentsHost): void {
+  catch(exception: unknown, host: ArgumentsHost) {
     // In certain situations `httpAdapter` might not be available in the
     // constructor method, thus we should resolve it here.
-    console.log(exception);
+
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx = host.switchToHttp();

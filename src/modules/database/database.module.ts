@@ -1,19 +1,24 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { IConfig } from 'config';
+
+import { ConfigModule } from '@microservice-auth/module-config/config.module';
+import { CONFIG } from '@microservice-auth/module-config/config.provider';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      inject: [CONFIG],
+      useFactory: (configService: IConfig) => ({
+        ...configService.get<{
+          host: string;
+          port: number;
+          username: string;
+          password: string;
+          database: string;
+        }>('postgresql'),
         type: 'postgres',
-        host: configService.get('POSTGRES_HOST'),
-        port: configService.get('POSTGRES_PORT'),
-        username: configService.get('POSTGRES_USER'),
-        password: configService.get('POSTGRES_PASSWORD'),
-        database: configService.get('POSTGRES_DB'),
         entities: ['dist/**/*.entity.js'],
         synchronize: true,
         autoLoadEntities: true,

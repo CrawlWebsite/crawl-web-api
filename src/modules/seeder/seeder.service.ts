@@ -6,7 +6,7 @@ import { faker } from '@faker-js/faker';
 const bcrypt = require('bcrypt');
 
 // Entity
-import { User, Role } from '@auth-service/entity';
+import { User, Role } from '@microservice-auth/entities';
 
 @Injectable()
 export class SeederService {
@@ -51,7 +51,7 @@ export class SeederService {
       roles.forEach((role) => {
         const user = new User();
 
-        user.name = faker.name.findName();
+        user.name = faker.name.fullName();
         user.email = faker.internet.email();
         user.roles = [role];
         user.password = hashedPassword;
