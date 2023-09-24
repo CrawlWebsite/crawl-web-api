@@ -7,7 +7,6 @@ import { CONFIG } from '@microservice-auth/module-config/config.provider';
 
 import { ConfigModule } from '@microservice-auth/module-config/config.module';
 import { UserModule } from '@microservice-auth/module-user/user.module';
-import { KafkaModule } from '@microservice-auth/module-kafka/kafka.module';
 
 import { AuthController } from './auth.controller';
 
@@ -21,7 +20,6 @@ import { JwtStrategy } from './guard/jwt.strategy';
     PassportModule,
     ConfigModule,
     UserModule,
-    KafkaModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [CONFIG],

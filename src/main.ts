@@ -26,6 +26,12 @@ async function bootstrap() {
   });
   const configService = app.get<IConfig>(CONFIG);
 
+  console.log(
+    configService.get<string>('postgresql'),
+    configService.get<string>('kafka.kafka_brokers'),
+    configService.get<string>('kafka.kafka_brokers').split('.'),
+    configService.get<string>('kafka.kafka_brokers').split(','),
+  );
   const microservice = app.connectMicroservice<MicroserviceOptions>(
     {
       transport: Transport.KAFKA,
@@ -73,7 +79,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.startAllMicroservices();
-  await app.listen(process.env.PORT);
+  await app.listen(configService.get<string>('server.port'));
 }
 
 bootstrap();

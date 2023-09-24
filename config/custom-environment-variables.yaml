@@ -21,3 +21,4 @@ auth:
 kafka:
   kafka_brokers: KAFKA_BROKERS
   kafka_client_id: KAFKA_CLIENT_ID
+  consumer_id: KAFKA_CONSUMER_ID

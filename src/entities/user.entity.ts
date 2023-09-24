@@ -1,21 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Role } from './role.entity';
+import { BaseEntity } from './base.entity';
 
 @Entity('users')
-export class User {
-  @PrimaryGeneratedColumn()
-  public id?: number;
-
+export class User extends BaseEntity {
   @Column({ unique: true })
   @ApiProperty()
   public email: string;
@@ -23,6 +13,10 @@ export class User {
   @Column()
   @ApiProperty()
   public name: string;
+
+  @Column({ unique: true })
+  @ApiProperty()
+  public code: string;
 
   @Column()
   @Exclude()

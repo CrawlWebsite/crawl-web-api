@@ -2,6 +2,3 @@ env: local
 
 server:
   base_url: /api/auth
-
-kafka:
-  consumer_id: auth-consumer

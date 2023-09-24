@@ -1,15 +1,13 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IConfig } from 'config';
+import bcrypt from 'bcryptjs';
 
 import { CONFIG } from '@microservice-auth/module-config/config.provider';
 import { PostgresErrorCode } from '@microservice-auth/module-database/postgresErrorCodes.enum';
 import { UserService } from '@microservice-auth/module-user/user.service';
 
 import { RegisterDto } from './dto/register.dto';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {

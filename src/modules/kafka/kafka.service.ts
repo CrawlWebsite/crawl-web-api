@@ -28,6 +28,7 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     const brokers = this.configService
       .get<string>('kafka.kafka_brokers')
       .split(',');
+
     const consumerId = this.configService.get<string>('kafka.consumer_id');
 
     this.client = new ClientKafka({

@@ -7,13 +7,13 @@ export enum Roles {
   SYSTEMADMIN = 'systemadmin',
 }
 
-@Entity('roles')
-export class Role extends BaseEntity {
+@Entity('migrations')
+export class Migration extends BaseEntity {
   @Column({
-    type: 'enum',
-    enum: Roles,
-    default: Roles.MEMBER,
-    unique: true,
+    type: 'bigint',
   })
+  public timestamp: number;
+
+  @Column()
   public name: string;
 }
