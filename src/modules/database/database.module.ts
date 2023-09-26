@@ -20,7 +20,8 @@ import { CONFIG } from '@microservice-auth/module-config/config.provider';
         }>('postgresql'),
         type: 'postgres',
         entities: ['dist/**/*.entity.js'],
-        synchronize: true,
+        synchronize:
+          configService.get<string>('env') === 'production' ? false : true,
         autoLoadEntities: true,
       }),
     }),

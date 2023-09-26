@@ -93,6 +93,16 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('verify-token')
   async verifyToken(@Req() request, @Res() response) {
+    const { id, email, name } = request.user;
+
+    request.res.setHeader(
+      'jwt_user_claim',
+      JSON.stringify({
+        id,
+        email,
+        name,
+      }),
+    );
     response.sendStatus(200);
   }
 

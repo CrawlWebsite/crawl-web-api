@@ -14,10 +14,6 @@ export class User extends BaseEntity {
   @ApiProperty()
   public name: string;
 
-  @Column({ unique: true })
-  @ApiProperty()
-  public code: string;
-
   @Column()
   @Exclude()
   public password: string;
