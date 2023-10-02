@@ -30,7 +30,10 @@ export class HttpExceptionsFilter implements ExceptionFilter {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
-      message: message,
+      message: {
+        error: message,
+        errorName: (exception as any)?.name,
+      },
     };
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

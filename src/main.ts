@@ -26,12 +26,6 @@ async function bootstrap() {
   });
   const configService = app.get<IConfig>(CONFIG);
 
-  console.log(
-    configService.get<string>('postgresql'),
-    configService.get<string>('kafka.kafka_brokers'),
-    configService.get<string>('kafka.kafka_brokers').split('.'),
-    configService.get<string>('kafka.kafka_brokers').split(','),
-  );
   const microservice = app.connectMicroservice<MicroserviceOptions>(
     {
       transport: Transport.KAFKA,

@@ -71,12 +71,16 @@ export class AuthController {
     const { email, password } = loginData;
 
     const user = await this.authService.getAuthenticatedUser(email, password);
-    const accessTokenData = this.authService.getCookieWithJwtAccessToken(
-      user.id,
-    );
-    const refreshTokenData = this.authService.getCookieWithJwtRefreshToken(
-      user.id,
-    );
+    const accessTokenData = this.authService.getCookieWithJwtAccessToken({
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+    });
+    const refreshTokenData = this.authService.getCookieWithJwtRefreshToken({
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+    });
 
     await this.usersService.setCurrentRefreshToken(
       refreshTokenData.token,
@@ -93,16 +97,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('verify-token')
   async verifyToken(@Req() request, @Res() response) {
-    const { id, email, name } = request.user;
-
-    request.res.setHeader(
-      'jwt_user_claim',
-      JSON.stringify({
-        id,
-        email,
-        name,
-      }),
-    );
     response.sendStatus(200);
   }
 
@@ -138,9 +132,11 @@ export class AuthController {
   })
   refresh(@Req() request) {
     const { user } = request;
-    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
-      user.id,
-    );
+    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken({
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+    });
 
     request.res.setHeader('Set-Cookie', accessTokenCookie.cookie);
     return user;

@@ -1,13 +1,14 @@
 {
-  "name": "microservice-auth",
-  "version": "0.0.1",
+  "name": "@vunam2000/microservice-auth",
+  "version": "1.0.7",
   "description": "",
   "author": "",
-  "private": true,
   "license": "UNLICENSED",
+  "main": "dist/src/sdk.js",
+  "types": "dist/src/sdk.d.ts",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",

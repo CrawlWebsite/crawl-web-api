@@ -22,6 +22,10 @@ import { CONFIG } from '@microservice-auth/module-config/config.provider';
         entities: ['dist/**/*.entity.js'],
         synchronize:
           configService.get<string>('env') === 'production' ? false : true,
+        log:
+          configService.get<string>('env') === 'production'
+            ? ['warn', 'error']
+            : true,
         autoLoadEntities: true,
       }),
     }),
