@@ -49,7 +49,6 @@ export class UserService {
 
     const newUser = new User();
     newUser.email = email;
-    newUser.name = name;
     newUser.password = password;
 
     let roleEntities = [];

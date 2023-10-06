@@ -51,7 +51,6 @@ export class SeederService {
       roles.forEach((role) => {
         const user = new User();
 
-        user.name = faker.name.fullName();
         user.email = faker.internet.email();
         user.roles = [role];
         user.password = hashedPassword;

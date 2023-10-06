@@ -2,20 +2,17 @@ import {
   OnModuleDestroy,
   OnModuleInit,
   Injectable,
-  UseFilters,
   Inject,
 } from '@nestjs/common';
 import { IConfig } from 'config';
 import { ClientKafka } from '@nestjs/microservices';
 import { Observable, lastValueFrom } from 'rxjs';
 
-import { HttpExceptionsFilter } from '@microservice-auth/config-exceptions';
 import { CONFIG } from '@microservice-auth/module-config/config.provider';
 
 import { KAFKA_TOPIC_PRODUCER } from './dto/types';
 
 @Injectable()
-@UseFilters(HttpExceptionsFilter)
 export class KafkaService implements OnModuleInit, OnModuleDestroy {
   private client: ClientKafka;
 

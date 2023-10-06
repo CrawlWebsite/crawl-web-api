@@ -42,6 +42,15 @@ async function bootstrap() {
     { inheritAppConfig: true },
   );
 
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'auth',
+      protoPath: 'src/proto/auth.proto',
+      url: configService.get<string>('server.grpc_hostname'),
+    },
+  });
+
   app.setGlobalPrefix(configService.get<string>('server.base_url'));
 
   app.useLogger(app.get(CustomLogger));
