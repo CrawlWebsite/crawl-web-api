@@ -1,12 +1,13 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Role } from './role.entity';
 import { BaseEntity } from './base.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
-  @PrimaryColumn('number')
-  public id: number;
+  @Column({ unique: true })
+  public userId: number;
 
+  @Column()
   public email: string;
 
   @Column()

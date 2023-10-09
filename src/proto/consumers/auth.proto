@@ -11,5 +11,12 @@ message HelloRequest {
 }
 
 message HelloResponse {
-  string message = 1;
+  string timestamp = 1;
+  string constructorRef = 2;
+  string handler = 3;
+  HelloPayloadResponse message = 4;
+}
+
+message HelloPayloadResponse {
+  string message = 5;
 }

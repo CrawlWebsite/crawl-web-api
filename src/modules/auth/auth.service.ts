@@ -5,7 +5,6 @@ import { IConfig } from 'config';
 const bcrypt = require('bcryptjs');
 
 import { CONFIG } from '@microservice-auth/module-config/config.provider';
-import { PostgresErrorCode } from '@microservice-auth/module-database/postgresErrorCodes.enum';
 import { UserService } from '@microservice-auth/module-user/user.service';
 
 import { RegisterDto } from './dto/register.dto';
@@ -20,25 +19,13 @@ export class AuthService {
 
   public async register(registrationData: RegisterDto) {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
-    try {
-      const createdUser = await this.usersService.createUser({
-        ...registrationData,
-        password: hashedPassword,
-      });
-      return createdUser;
-    } catch (error) {
-      if (error?.code === PostgresErrorCode.UniqueViolation) {
-        throw new HttpException(
-          'User with that email already exists',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      throw new HttpException(
-        'Something went wrong',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const createdUser = await this.usersService.createUser({
+      ...registrationData,
+      password: hashedPassword,
+    });
+    return createdUser;
   }
+
   public async getAuthenticatedUser(email: string, plainTextPassword: string) {
     try {
       const user = await this.usersService.getByEmail(email);

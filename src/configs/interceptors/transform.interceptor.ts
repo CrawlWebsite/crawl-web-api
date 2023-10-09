@@ -3,31 +3,53 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
+  ContextType,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
-export interface Response<T> {
-  data: T;
+import { HttpInterceptor } from './http.interceptor';
+import { GrpcInterceptor } from './grpc.interceptor';
+
+class Interceptor {
+  private readonly httpInterceptor: HttpInterceptor;
+  private readonly grpcInterceptor: GrpcInterceptor;
+
+  constructor() {
+    this.httpInterceptor = new HttpInterceptor();
+    this.grpcInterceptor = new GrpcInterceptor();
+  }
+
+  public getInterceptor(type: ContextType) {
+    switch (type) {
+      case 'http':
+        return this.httpInterceptor;
+      case 'rpc':
+        return this.grpcInterceptor;
+      default:
+        return undefined;
+    }
+  }
+
+  public excute(
+    type: ContextType,
+    context: ExecutionContext,
+    next: CallHandler,
+  ) {
+    const interceptor = this.getInterceptor(type);
+
+    return interceptor.intercept(context, next);
+  }
 }
 
 @Injectable()
-export class TransformInterceptor<T>
-  implements NestInterceptor<T, Response<T>>
-{
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const res = context.switchToHttp().getResponse();
+export class TransformInterceptor implements NestInterceptor {
+  private interceptor: Interceptor;
+  constructor() {
+    this.interceptor = new Interceptor();
+  }
 
-    return next.handle().pipe(
-      map((data) => {
-        const responseBody = {
-          statusCode: res?.statusCode,
-          timestamp: new Date().toISOString(),
-          path: res?.req?.originalUrl,
-          message: data,
-        };
-        return responseBody;
-      }),
-    );
+  intercept(context: ExecutionContext, next: CallHandler): any {
+    const type = context.getType();
+
+    return this.interceptor.excute(type, context, next);
   }
 }

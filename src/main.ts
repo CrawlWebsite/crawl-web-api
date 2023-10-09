@@ -12,7 +12,7 @@ import CustomLogger from '@microservice-auth/module-log/customLogger';
 
 import getLogLevels from '@microservice-auth/utils/getLogLevels';
 
-import { HttpExceptionsFilter } from '@microservice-auth/config-exceptions';
+import { AllExceptionsFilter } from '@microservice-auth/config-exceptions';
 import { TransformInterceptor } from '@microservice-auth/config-interceptors';
 import { CONFIG } from '@microservice-auth/module-config/config.provider';
 
@@ -26,30 +26,33 @@ async function bootstrap() {
   });
   const configService = app.get<IConfig>(CONFIG);
 
-  const microservice = app.connectMicroservice<MicroserviceOptions>(
+  // const microservice = app.connectMicroservice<MicroserviceOptions>(
+  //   {
+  //     transport: Transport.KAFKA,
+  //     options: {
+  //       client: {
+  //         clientId: configService.get<string>('kafka.kafka_client_id'),
+  //         brokers: configService.get<string>('kafka.kafka_brokers').split(','),
+  //       },
+  //       consumer: {
+  //         groupId: configService.get<string>('kafka.consumer_id'),
+  //       },
+  //     },
+  //   },
+  //   { inheritAppConfig: true },
+  // );
+
+  const gRPCMicroservice = app.connectMicroservice<MicroserviceOptions>(
     {
-      transport: Transport.KAFKA,
+      transport: Transport.GRPC,
       options: {
-        client: {
-          clientId: configService.get<string>('kafka.kafka_client_id'),
-          brokers: configService.get<string>('kafka.kafka_brokers').split(','),
-        },
-        consumer: {
-          groupId: configService.get<string>('kafka.consumer_id'),
-        },
+        package: 'auth',
+        protoPath: 'dist/proto/consumer.proto',
+        url: configService.get<string>('server.grpc_hostname'),
       },
     },
     { inheritAppConfig: true },
   );
-
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.GRPC,
-    options: {
-      package: 'auth',
-      protoPath: 'src/proto/auth.proto',
-      url: configService.get<string>('server.grpc_hostname'),
-    },
-  });
 
   app.setGlobalPrefix(configService.get<string>('server.base_url'));
 
@@ -60,7 +63,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  microservice.useGlobalPipes(new ValidationPipe());
+  // microservice.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
@@ -69,7 +72,7 @@ async function bootstrap() {
   // Catch exception
   const httpAdapter = app.get(HttpAdapterHost);
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new HttpExceptionsFilter(httpAdapter));
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   // Swagger
   const swaggerConfig = new DocumentBuilder()

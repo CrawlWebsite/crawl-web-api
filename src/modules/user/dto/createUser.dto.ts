@@ -5,6 +5,8 @@ import {
   MinLength,
   IsArray,
   IsEnum,
+  IsOptional,
+  ValidateIf,
 } from 'class-validator';
 import { Roles } from '@microservice-auth/entities';
 
@@ -23,7 +25,14 @@ export class CreateUserDto {
 
   @IsArray()
   @IsEnum(Roles, { each: true })
-  roles: string[];
+  roles?: string[];
 }
 
-export default CreateUserDto;
+export class CreateUserGrpcRequestDto {
+  email: string;
+  name: string;
+}
+
+export class CreateUserGrpcResponseDto extends CreateUserGrpcRequestDto {
+  id: number;
+}

@@ -5,6 +5,7 @@ server:
   port: SERVER_PORT
   hostname: SERVER_HOSTNAME
   grpc_hostname: SERVER_GRPC_HOSTNAME
+  grpc_gateway_hostname: SERVER_GRPC_GATEWAY_HOSTNAME
 
 postgresql:
   host: POSTGRES_HOST

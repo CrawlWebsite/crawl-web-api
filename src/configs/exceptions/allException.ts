@@ -6,14 +6,19 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { RpcException } from '@nestjs/microservices';
 
 @Catch()
-export class HttpExceptionsFilter implements ExceptionFilter {
+export class AllExceptionsFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     // In certain situations `httpAdapter` might not be available in the
     // constructor method, thus we should resolve it here.
+    console.log(exception);
+    if (exception instanceof RpcException) {
+      return Promise.reject(exception);
+    }
 
     const { httpAdapter } = this.httpAdapterHost;
 

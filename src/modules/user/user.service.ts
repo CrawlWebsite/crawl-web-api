@@ -6,8 +6,8 @@ const bcrypt = require('bcryptjs');
 
 import { Role, Roles, User } from '@microservice-auth/entities';
 
-import CreateUserDto from './dto/createUser.dto';
-import UpdateUserDto from './dto/updateUser.dto';
+import { UserGrpcService } from './user.grpc.service';
+import { CreateUserDto, UpdateUserDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -17,6 +17,8 @@ export class UserService {
 
     @InjectRepository(Role)
     private roleRepository: Repository<Role>,
+
+    private readonly userGrpcService: UserGrpcService,
   ) {}
 
   async getByEmail(email: string) {
@@ -47,12 +49,17 @@ export class UserService {
   public async createUser(userData: CreateUserDto) {
     const { email, name, password, roles } = userData;
 
+    // Create a new user in user-service
+    const user = await this.userGrpcService.createUser({ email, name });
+    console.log(user);
+
     const newUser = new User();
-    newUser.email = email;
+    newUser.userId = user.id;
+    newUser.email = user.email;
     newUser.password = password;
 
     let roleEntities = [];
-    if (roles.length > 0) {
+    if (roles?.length > 0) {
       roleEntities = await this.roleRepository.find({
         where: {
           name: In(roles),
@@ -69,6 +76,7 @@ export class UserService {
 
     newUser.roles = roleEntities;
 
+    console.log(newUser);
     await this.usersRepository.save(newUser);
     return newUser;
   }
