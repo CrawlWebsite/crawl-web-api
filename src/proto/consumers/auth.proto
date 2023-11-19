@@ -3,20 +3,19 @@ syntax = "proto3";
 package auth;
 
 service AuthService {
-  rpc SayHello (HelloRequest) returns (HelloResponse);
+  rpc Authenticate (AuthenticateRequest) returns (AuthenticateResponse);
 }
 
-message HelloRequest {
-  string name = 1;
+message AuthenticateRequest {
 }
 
-message HelloResponse {
+message AuthenticateResponse {
   string timestamp = 1;
   string constructorRef = 2;
   string handler = 3;
-  HelloPayloadResponse message = 4;
+  AuthenticatePayloadResponse message = 4;
 }
 
-message HelloPayloadResponse {
-  string message = 5;
+message AuthenticatePayloadResponse {
+  int64 userId = 1;
 }

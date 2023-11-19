@@ -5,8 +5,6 @@ import {
   MinLength,
   IsArray,
   IsEnum,
-  IsOptional,
-  ValidateIf,
 } from 'class-validator';
 import { Roles } from '@microservice-auth/entities';
 

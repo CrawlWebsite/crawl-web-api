@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
 
 import { LocalStrategy } from './guard/local.strategy';
 import { JwtStrategy } from './guard/jwt.strategy';
+import { AuthGrpcController } from './auth.grpc.controller';
 
 @Module({
   imports: [
@@ -32,6 +33,6 @@ import { JwtStrategy } from './guard/jwt.strategy';
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
-  controllers: [AuthController],
+  controllers: [AuthController, AuthGrpcController],
 })
 export class AuthModule {}
