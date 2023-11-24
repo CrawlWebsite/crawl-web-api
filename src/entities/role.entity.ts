@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { BaseEntity } from './base.entity';
 
 export enum Roles {
   ADMIN = 'admin',
@@ -7,10 +8,7 @@ export enum Roles {
 }
 
 @Entity('roles')
-export class Role {
-  @PrimaryGeneratedColumn()
-  public id?: number;
-
+export class Role extends BaseEntity {
   @Column({
     type: 'enum',
     enum: Roles,

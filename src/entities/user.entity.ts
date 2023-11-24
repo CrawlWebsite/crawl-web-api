@@ -1,37 +1,21 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Role } from './role.entity';
+import { BaseEntity } from './base.entity';
 
 @Entity('users')
-export class User {
-  @PrimaryGeneratedColumn()
-  public id?: number;
-
+export class User extends BaseEntity {
   @Column({ unique: true })
-  @ApiProperty()
+  public userId: number;
+
+  @Column()
   public email: string;
 
   @Column()
-  @ApiProperty()
-  public name: string;
-
-  @Column()
-  @Exclude()
   public password: string;
 
   @Column({
     nullable: true,
   })
-  @Exclude()
   public currentHashedRefreshToken?: string;
 
   @ManyToMany(() => Role)

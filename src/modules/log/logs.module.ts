@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Log } from '@auth-service/entity';
+import { ConfigModule } from '@crawl-web-api/module-config/config.module';
+import { Log } from '@crawl-web-api/entities';
 
 import LogsService from './logs.service';
 import CustomLogger from './customLogger';

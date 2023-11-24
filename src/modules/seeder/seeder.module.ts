@@ -1,35 +1,16 @@
-import * as Joi from '@hapi/joi';
 import { Logger, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { User, Role } from '@auth-service/entity';
+import { User, Role } from '@crawl-web-api/entities';
 
-import { DatabaseModule } from '@auth-service/module-database/database.module';
+import { DatabaseModule } from '@crawl-web-api/module-database/database.module';
+import { ConfigModule } from '@crawl-web-api/module-config/config.module';
 
 import { SeederService } from './seeder.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      validationSchema: Joi.object({
-        // PostgresQL
-        POSTGRES_HOST: Joi.string().required(),
-        POSTGRES_PORT: Joi.number().required(),
-        POSTGRES_USER: Joi.string().required(),
-        POSTGRES_PASSWORD: Joi.string().required(),
-        POSTGRES_DB: Joi.string().required(),
-
-        // Port server
-        PORT: Joi.number(),
-
-        // JWT
-        JWT_SECRET: Joi.string().required(),
-        JWT_EXPIRATION_TIME: Joi.string().required(),
-        JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
-        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
-      }),
-    }),
+    ConfigModule,
     DatabaseModule,
     TypeOrmModule.forFeature([User, Role]),
   ],

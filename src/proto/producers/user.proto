@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package user;
+
+import '../base/response.base.proto';
+
+service UserService {
+    rpc GetUserByEmail (GetUserByEmailRequest) returns (GetUserByEmailResponse);
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+}
+
+// GetUserByEmail
+message GetUserByEmailRequest {
+    string email = 1;
+}
+message GetUserByEmailResponse {
+    extend BaseResponse {
+        string extendedField = 4;
+    }
+    
+    GetUserByEmailPayloadResponse message = 4;
+}
+message GetUserByEmailPayloadResponse {
+    string message = 1;
+}
+
+// CreateUser
+message CreateUserRequest {
+    string email = 1;
+    string name = 2;
+}
+message CreateUserResponse {
+    extend BaseResponse {
+        string extendedField = 5;
+    }
+    
+    CreateUserPayloadResponse message = 5;
+}
+message CreateUserPayloadResponse {
+    int32 id = 1;
+    string email = 2;
+    string name = 3;
+}

@@ -6,7 +6,7 @@ import {
   IsArray,
   IsEnum,
 } from 'class-validator';
-import { Roles } from 'src/entities/role.entity';
+import { Roles } from '@crawl-web-api/entities';
 
 export class CreateUserDto {
   @IsEmail()
@@ -23,7 +23,14 @@ export class CreateUserDto {
 
   @IsArray()
   @IsEnum(Roles, { each: true })
-  roles: string[];
+  roles?: string[];
 }
 
-export default CreateUserDto;
+export class CreateUserGrpcRequestDto {
+  email: string;
+  name: string;
+}
+
+export class CreateUserGrpcResponseDto extends CreateUserGrpcRequestDto {
+  id: number;
+}

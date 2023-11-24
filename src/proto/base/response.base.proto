@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+message BaseResponse {
+    string timestamp = 1;
+    string constructorRef = 2;
+    string handler = 3;
+}

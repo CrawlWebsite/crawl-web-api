@@ -1,23 +1,18 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
-import * as Joi from '@hapi/joi';
 
-import { DatabaseModule } from '@auth-service/module-database/database.module';
-import { LoggerModule } from './modules/log/logs.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './modules/user/user.module';
+import { DatabaseModule } from '@crawl-web-api/module-database/database.module';
+import { LoggerModule } from '@crawl-web-api/module-log/logs.module';
+import { AuthModule } from '@crawl-web-api/module-auth/auth.module';
+import { UserModule } from '@crawl-web-api/module-user/user.module';
+
+import { LoggerMiddleware } from '@crawl-web-api/config-middlewares';
+import { TransformInterceptor } from '@crawl-web-api/config-interceptors';
+import { AllExceptionsFilter } from '@crawl-web-api/config-exceptions';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
-import LoggerMiddleware from './configs/middlewares/logger.middleware';
-import { AllExceptionsFilter } from './configs/decorators/catchError';
-
-import {
-  KafkaConstants,
-  ServerConstants,
-} from '@auth-service/config/constants';
 
 @Module({
   controllers: [AppController],
@@ -27,37 +22,12 @@ import {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
+    },
   ],
-  imports: [
-    LoggerModule,
-    ConfigModule.forRoot({
-      load: [KafkaConstants, ServerConstants],
-      validationSchema: Joi.object({
-        // PostgresQL
-        POSTGRES_HOST: Joi.string().required(),
-        POSTGRES_PORT: Joi.number().required(),
-        POSTGRES_USER: Joi.string().required(),
-        POSTGRES_PASSWORD: Joi.string().required(),
-        POSTGRES_DB: Joi.string().required(),
-
-        // Port server
-        PORT: Joi.number(),
-
-        // JWT
-        JWT_SECRET: Joi.string().required(),
-        JWT_EXPIRATION_TIME: Joi.string().required(),
-        JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
-        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
-
-        // Kafka broker
-        KAFKA_BROKERS: Joi.string().required(),
-        KAFKA_CLIENT_ID: Joi.string().required(),
-      }),
-    }),
-    DatabaseModule,
-    AuthModule,
-    UserModule,
-  ],
+  imports: [LoggerModule, ConfigModule, DatabaseModule, AuthModule, UserModule],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

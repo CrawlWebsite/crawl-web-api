@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { faker } from '@faker-js/faker';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 // Entity
-import { User, Role } from '@auth-service/entity';
+import { User, Role } from '@crawl-web-api/entities';
 
 @Injectable()
 export class SeederService {
@@ -51,7 +51,6 @@ export class SeederService {
       roles.forEach((role) => {
         const user = new User();
 
-        user.name = faker.name.findName();
         user.email = faker.internet.email();
         user.roles = [role];
         user.password = hashedPassword;
@@ -63,6 +62,7 @@ export class SeederService {
 
       this.logger.debug('Successfuly completed seeding users...');
     } catch (error) {
+      console.log(error);
       this.logger.error('Failed seeding users...');
     }
   }

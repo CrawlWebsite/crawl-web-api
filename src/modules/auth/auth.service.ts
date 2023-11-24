@@ -1,45 +1,31 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { IConfig } from 'config';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bcrypt = require('bcryptjs');
 
-import { PostgresErrorCode } from '@auth-service/module-database/postgresErrorCodes.enum';
-
-import { UserService } from '@auth-service/module-user/user.service';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
+import { UserService } from '@crawl-web-api/module-user/user.service';
 
 import { RegisterDto } from './dto/register.dto';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    @Inject(CONFIG) private readonly configService: IConfig,
   ) {}
 
   public async register(registrationData: RegisterDto) {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
-    try {
-      const createdUser = await this.usersService.createUser({
-        ...registrationData,
-        password: hashedPassword,
-      });
-      return createdUser;
-    } catch (error) {
-      if (error?.code === PostgresErrorCode.UniqueViolation) {
-        throw new HttpException(
-          'User with that email already exists',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      throw new HttpException(
-        'Something went wrong',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const createdUser = await this.usersService.createUser({
+      ...registrationData,
+      password: hashedPassword,
+    });
+    return createdUser;
   }
+
   public async getAuthenticatedUser(email: string, plainTextPassword: string) {
     try {
       const user = await this.usersService.getByEmail(email);
@@ -69,14 +55,13 @@ export class AuthService {
     }
   }
 
-  public getCookieWithJwtAccessToken(userId: number) {
-    const payload: TokenPayload = { userId };
+  public getCookieWithJwtAccessToken(payload: TokenPayload) {
     const token = this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_SECRET'),
-      expiresIn: `${this.configService.get('JWT_EXPIRATION_TIME')}s`,
+      secret: this.configService.get('auth.jwt_secret'),
+      expiresIn: `${this.configService.get('auth.jwt_expiration_time')}s`,
     });
     const cookie = `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      'auth.jwt_expiration_time',
     )}`;
     return {
       cookie,
@@ -84,16 +69,15 @@ export class AuthService {
     };
   }
 
-  public getCookieWithJwtRefreshToken(userId: number) {
-    const payload: TokenPayload = { userId };
+  public getCookieWithJwtRefreshToken(payload: TokenPayload) {
     const token = this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      secret: this.configService.get('auth.jwt_refresh_token_secret'),
       expiresIn: `${this.configService.get(
-        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+        'auth.jwt_refresh_token_expiration_time',
       )}s`,
     });
     const cookie = `Refresh=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+      'auth.jwt_refresh_token_expiration_time',
     )}`;
     return {
       cookie,

@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
+import { IConfig } from 'config';
 
-import { UserModule } from '@auth-service/module-user/user.module';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
+
+import { ConfigModule } from '@crawl-web-api/module-config/config.module';
+import { UserModule } from '@crawl-web-api/module-user/user.module';
 
 import { AuthController } from './auth.controller';
 
@@ -19,11 +22,11 @@ import { JwtStrategy } from './guard/jwt.strategy';
     UserModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
+      inject: [CONFIG],
+      useFactory: async (configService: IConfig) => ({
+        secret: configService.get('auth.jwt_secret'),
         signOptions: {
-          expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}s`,
+          expiresIn: `${configService.get('auth.jwt_expiration_time')}s`,
         },
       }),
     }),

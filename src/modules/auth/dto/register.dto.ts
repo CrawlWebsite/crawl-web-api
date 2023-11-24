@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsString,
@@ -6,25 +5,24 @@ import {
   MinLength,
   IsArray,
   IsEnum,
+  IsOptional,
 } from 'class-validator';
-import { Roles } from 'src/entities/role.entity';
+import { Roles } from '@crawl-web-api/entities';
 
 export class RegisterDto {
   @IsEmail()
-  @ApiProperty()
   email: string;
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
   name: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
-  @ApiProperty()
   password: string;
 
+  @IsOptional()
   @IsArray()
   @IsEnum(Roles, { each: true })
   roles: string[];

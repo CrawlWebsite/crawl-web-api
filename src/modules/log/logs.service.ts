@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Log } from '@auth-service/entity';
+import { Log } from '@crawl-web-api/entities';
 
 import { CreateLogDto } from './dto/createLog.dto';
 
@@ -14,7 +14,7 @@ export default class LogsService {
   ) {}
 
   async createLog(log: CreateLogDto) {
-    const newLog = await this.logsRepository.create(log);
+    const newLog = this.logsRepository.create(log);
     await this.logsRepository.save(newLog, {
       data: {
         isCreatingLogs: true,

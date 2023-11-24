@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService {
+  rpc Authenticate (AuthenticateRequest) returns (AuthenticateResponse);
+}
+
+message AuthenticateRequest {
+}
+
+message AuthenticateResponse {
+  string timestamp = 1;
+  string constructorRef = 2;
+  string handler = 3;
+  AuthenticatePayloadResponse message = 4;
+}
+
+message AuthenticatePayloadResponse {
+  int64 userId = 1;
+}

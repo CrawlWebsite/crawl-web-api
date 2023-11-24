@@ -5,16 +5,17 @@ import {
   Controller,
   HttpCode,
   Post,
-  UseGuards,
   Res,
   Get,
+  Inject,
+  UseGuards,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
-import { ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { IConfig } from 'config';
 
 // Service
-import { UserService } from '@auth-service/module-user/user.service';
+import { UserService } from '@crawl-web-api/module-user/user.service';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 import { AuthService } from './auth.service';
 
 // Dto
@@ -26,16 +27,15 @@ import { JwtAuthGuard } from './guard/jwtAuth.guard';
 import { JwtRefreshGuard } from './guard/jwtRefresh.guard';
 
 // Entity
-import { User } from '@auth-service/entity';
+import { User } from '@crawl-web-api/entities';
 
-@Controller('auth')
+@Controller()
 @ApiTags('Auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UserService,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    @Inject(CONFIG) private readonly configService: IConfig,
   ) {}
 
   @Post('register')
@@ -69,16 +69,18 @@ export class AuthController {
     const { email, password } = loginData;
 
     const user = await this.authService.getAuthenticatedUser(email, password);
-    const accessTokenData = this.authService.getCookieWithJwtAccessToken(
-      user.id,
-    );
-    const refreshTokenData = this.authService.getCookieWithJwtRefreshToken(
-      user.id,
-    );
+    const accessTokenData = this.authService.getCookieWithJwtAccessToken({
+      userId: user.userId,
+      email: user.email,
+    });
+    const refreshTokenData = this.authService.getCookieWithJwtRefreshToken({
+      userId: user.userId,
+      email: user.email,
+    });
 
     await this.usersService.setCurrentRefreshToken(
       refreshTokenData.token,
-      user.id,
+      user.userId,
     );
 
     request.res.setHeader('Set-Cookie', [
@@ -120,9 +122,10 @@ export class AuthController {
   })
   refresh(@Req() request) {
     const { user } = request;
-    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
-      user.id,
-    );
+    const accessTokenCookie = this.authService.getCookieWithJwtAccessToken({
+      userId: user.id,
+      email: user.email,
+    });
 
     request.res.setHeader('Set-Cookie', accessTokenCookie.cookie);
     return user;

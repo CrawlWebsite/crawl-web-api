@@ -1,31 +1,19 @@
 version: "3"
+
 services:
-  postgres:
-    container_name: postgres
-    image: postgres:latest
-    ports:
-    - "5432:5432"
-    volumes:
-    - /data/postgres:/data/postgres
+  scrum-auth-api:
+    platform: linux/arm64
+    container_name: scrum-auth-api
+    image: vunam2000/scrum-auth-api
+    build:
+      context: .
     env_file:
-    - docker.env
-    networks:
-    - postgres
- 
-  pgadmin:
-    links:
-    - postgres:postgres
-    container_name: pgadmin
-    image: dpage/pgadmin4
+      - .env
     ports:
-    - "8080:80"
-    volumes:
-    - /data/pgadmin:/root/.pgadmin
-    env_file:
-    - docker.env
+      - "${SERVER_PORT}:${SERVER_PORT}"
     networks:
-    - postgres
+      - scrum-microservice
  
 networks:
-  postgres:
+  scrum-microservice:
     driver: bridge
