@@ -18,10 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@microservice-auth/module-*": ["src/modules/*"],
-      "@microservice-auth/config-*": ["src/configs/*"],
-      "@microservice-auth/entities": ["src/entities"],
-      "@microservice-auth/utils/*": ["src/utils/*"]
+      "@crawl-web-api/module-*": ["src/modules/*"],
+      "@crawl-web-api/config-*": ["src/configs/*"],
+      "@crawl-web-api/entities": ["src/entities"],
+      "@crawl-web-api/utils/*": ["src/utils/*"]
     }
   }
 }

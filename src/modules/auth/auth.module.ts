@@ -3,10 +3,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { IConfig } from 'config';
 
-import { CONFIG } from '@microservice-auth/module-config/config.provider';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 
-import { ConfigModule } from '@microservice-auth/module-config/config.module';
-import { UserModule } from '@microservice-auth/module-user/user.module';
+import { ConfigModule } from '@crawl-web-api/module-config/config.module';
+import { UserModule } from '@crawl-web-api/module-user/user.module';
 
 import { AuthController } from './auth.controller';
 
@@ -14,7 +14,6 @@ import { AuthService } from './auth.service';
 
 import { LocalStrategy } from './guard/local.strategy';
 import { JwtStrategy } from './guard/jwt.strategy';
-import { AuthGrpcController } from './auth.grpc.controller';
 
 @Module({
   imports: [
@@ -33,6 +32,6 @@ import { AuthGrpcController } from './auth.grpc.controller';
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
-  controllers: [AuthController, AuthGrpcController],
+  controllers: [AuthController],
 })
 export class AuthModule {}

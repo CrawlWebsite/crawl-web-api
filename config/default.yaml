@@ -1,4 +1,4 @@
 env: local
 
 server:
-  base_url: /api/auth
+  base_url: /api

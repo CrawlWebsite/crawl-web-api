@@ -7,7 +7,7 @@ import {
   IsEnum,
   IsOptional,
 } from 'class-validator';
-import { Roles } from '@microservice-auth/entities';
+import { Roles } from '@crawl-web-api/entities';
 
 export class RegisterDto {
   @IsEmail()

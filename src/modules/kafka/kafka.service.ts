@@ -8,7 +8,7 @@ import { IConfig } from 'config';
 import { ClientKafka } from '@nestjs/microservices';
 import { Observable, lastValueFrom } from 'rxjs';
 
-import { CONFIG } from '@microservice-auth/module-config/config.provider';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 
 import { KAFKA_TOPIC_PRODUCER } from './dto/types';
 

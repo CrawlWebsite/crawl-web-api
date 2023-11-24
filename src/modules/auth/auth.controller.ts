@@ -5,18 +5,17 @@ import {
   Controller,
   HttpCode,
   Post,
-  UseGuards,
   Res,
   Get,
   Inject,
+  UseGuards,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IConfig } from 'config';
 
 // Service
-import { UserService } from '@microservice-auth/module-user/user.service';
-import { CONFIG } from '@microservice-auth/module-config/config.provider';
+import { UserService } from '@crawl-web-api/module-user/user.service';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 import { AuthService } from './auth.service';
 
 // Dto
@@ -28,7 +27,7 @@ import { JwtAuthGuard } from './guard/jwtAuth.guard';
 import { JwtRefreshGuard } from './guard/jwtRefresh.guard';
 
 // Entity
-import { User } from '@microservice-auth/entities';
+import { User } from '@crawl-web-api/entities';
 
 @Controller()
 @ApiTags('Auth')
@@ -36,7 +35,6 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UserService,
-    private readonly jwtService: JwtService,
     @Inject(CONFIG) private readonly configService: IConfig,
   ) {}
 
@@ -90,12 +88,6 @@ export class AuthController {
       refreshTokenData.cookie,
     ]);
     return user;
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('verify-token')
-  async verifyToken(@Req() request, @Res() response) {
-    response.sendStatus(200);
   }
 
   @HttpCode(200)

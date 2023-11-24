@@ -6,7 +6,7 @@ import { faker } from '@faker-js/faker';
 const bcrypt = require('bcryptjs');
 
 // Entity
-import { User, Role } from '@microservice-auth/entities';
+import { User, Role } from '@crawl-web-api/entities';
 
 @Injectable()
 export class SeederService {

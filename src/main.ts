@@ -8,13 +8,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import { IConfig } from 'config';
 
-import CustomLogger from '@microservice-auth/module-log/customLogger';
+import CustomLogger from '@crawl-web-api/module-log/customLogger';
 
-import getLogLevels from '@microservice-auth/utils/getLogLevels';
+import getLogLevels from '@crawl-web-api/utils/getLogLevels';
 
-import { AllExceptionsFilter } from '@microservice-auth/config-exceptions';
-import { TransformInterceptor } from '@microservice-auth/config-interceptors';
-import { CONFIG } from '@microservice-auth/module-config/config.provider';
+import { AllExceptionsFilter } from '@crawl-web-api/config-exceptions';
+import { TransformInterceptor } from '@crawl-web-api/config-interceptors';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 
 import { AppModule } from './app.module';
 
@@ -42,18 +42,6 @@ async function bootstrap() {
   //   },
   //   { inheritAppConfig: true },
   // );
-
-  const gRPCMicroservice = app.connectMicroservice<MicroserviceOptions>(
-    {
-      transport: Transport.GRPC,
-      options: {
-        package: 'auth',
-        protoPath: 'dist/proto/consumer.proto',
-        url: configService.get<string>('server.grpc_hostname'),
-      },
-    },
-    { inheritAppConfig: true },
-  );
 
   app.setGlobalPrefix(configService.get<string>('server.base_url'));
 

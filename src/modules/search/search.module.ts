@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { IConfig } from 'config';
 
-import { CONFIG } from '@microservice-auth/module-config/config.provider';
-import { ConfigModule } from '@microservice-auth/module-config/config.module';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
+import { ConfigModule } from '@crawl-web-api/module-config/config.module';
 
 @Module({
   imports: [

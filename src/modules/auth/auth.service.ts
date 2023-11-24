@@ -4,8 +4,8 @@ import { IConfig } from 'config';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
-import { CONFIG } from '@microservice-auth/module-config/config.provider';
-import { UserService } from '@microservice-auth/module-user/user.service';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
+import { UserService } from '@crawl-web-api/module-user/user.service';
 
 import { RegisterDto } from './dto/register.dto';
 

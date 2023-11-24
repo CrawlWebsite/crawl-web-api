@@ -8,7 +8,7 @@ import {
 import { HttpAdapterHost } from '@nestjs/core';
 import { RpcException } from '@nestjs/microservices';
 
-import CustomLogger from '@microservice-auth/module-log/customLogger';
+import CustomLogger from '@crawl-web-api/module-log/customLogger';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {

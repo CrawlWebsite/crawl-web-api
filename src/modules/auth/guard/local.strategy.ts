@@ -2,7 +2,7 @@ import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 
-import { User } from '@microservice-auth/entities';
+import { User } from '@crawl-web-api/entities';
 
 import { AuthService } from '../auth.service';
 

@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IConfig } from 'config';
 
-import { ConfigModule } from '@microservice-auth/module-config/config.module';
-import { CONFIG } from '@microservice-auth/module-config/config.provider';
+import { ConfigModule } from '@crawl-web-api/module-config/config.module';
+import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 
 @Module({
   imports: [

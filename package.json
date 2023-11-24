@@ -1,11 +1,8 @@
 {
-  "name": "@vunam2000/microservice-auth",
+  "name": "@web-data-lake/crawl-web-api",
   "version": "1.0.7",
   "description": "",
   "author": "",
-  "license": "UNLICENSED",
-  "main": "dist/src/sdk.js",
-  "types": "dist/src/sdk.d.ts",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

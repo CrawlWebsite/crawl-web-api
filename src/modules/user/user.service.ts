@@ -4,7 +4,7 @@ import { In, Repository } from 'typeorm';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
-import { Role, Roles, User } from '@microservice-auth/entities';
+import { Role, Roles, User } from '@crawl-web-api/entities';
 
 import { UserGrpcService } from './user.grpc.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
