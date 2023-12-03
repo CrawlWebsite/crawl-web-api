@@ -27,21 +27,21 @@ async function bootstrap() {
   const configService = app.get<IConfig>(CONFIG);
   const loggerService = app.get(CustomLogger);
 
-  // const microservice = app.connectMicroservice<MicroserviceOptions>(
-  //   {
-  //     transport: Transport.KAFKA,
-  //     options: {
-  //       client: {
-  //         clientId: configService.get<string>('kafka.kafka_client_id'),
-  //         brokers: configService.get<string>('kafka.kafka_brokers').split(','),
-  //       },
-  //       consumer: {
-  //         groupId: configService.get<string>('kafka.consumer_id'),
-  //       },
-  //     },
-  //   },
-  //   { inheritAppConfig: true },
-  // );
+  const microservice = app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: Transport.KAFKA,
+      options: {
+        client: {
+          clientId: configService.get<string>('kafka.kafka_client_id'),
+          brokers: configService.get<string>('kafka.kafka_brokers').split(','),
+        },
+        consumer: {
+          groupId: configService.get<string>('kafka.consumer_id'),
+        },
+      },
+    },
+    { inheritAppConfig: true },
+  );
 
   app.setGlobalPrefix(configService.get<string>('server.base_url'));
 
@@ -52,7 +52,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  // microservice.useGlobalPipes(new ValidationPipe());
+  microservice.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

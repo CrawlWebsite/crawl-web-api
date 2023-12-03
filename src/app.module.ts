@@ -13,6 +13,8 @@ import { AllExceptionsFilter } from '@crawl-web-api/config-exceptions';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { WebPageModule } from '@crawl-web-api/module-web-page/webPage.module';
+import { CrawlerModule } from '@crawl-web-api/module-crawler/crawler.module';
 
 @Module({
   controllers: [AppController],
@@ -27,7 +29,15 @@ import { AppService } from './app.service';
       useClass: TransformInterceptor,
     },
   ],
-  imports: [LoggerModule, ConfigModule, DatabaseModule, AuthModule, UserModule],
+  imports: [
+    LoggerModule,
+    ConfigModule,
+    DatabaseModule,
+    AuthModule,
+    UserModule,
+    WebPageModule,
+    CrawlerModule,
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

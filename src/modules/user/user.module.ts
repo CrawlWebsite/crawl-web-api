@@ -4,12 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './user.service';
 
 import { User, Role } from '@crawl-web-api/entities';
-import { GrpcModule } from '@crawl-web-api/module-gRPC/gRPC.module';
-import { UserGrpcService } from './user.grpc.service';
 
 @Module({
-  imports: [GrpcModule, TypeOrmModule.forFeature([User, Role])],
-  providers: [UserService, UserGrpcService],
-  exports: [UserService, UserGrpcService],
+  imports: [TypeOrmModule.forFeature([User, Role])],
+  providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

@@ -70,17 +70,17 @@ export class AuthController {
 
     const user = await this.authService.getAuthenticatedUser(email, password);
     const accessTokenData = this.authService.getCookieWithJwtAccessToken({
-      userId: user.userId,
+      userId: user.id,
       email: user.email,
     });
     const refreshTokenData = this.authService.getCookieWithJwtRefreshToken({
-      userId: user.userId,
+      userId: user.id,
       email: user.email,
     });
 
     await this.usersService.setCurrentRefreshToken(
       refreshTokenData.token,
-      user.userId,
+      user.id,
     );
 
     request.res.setHeader('Set-Cookie', [
