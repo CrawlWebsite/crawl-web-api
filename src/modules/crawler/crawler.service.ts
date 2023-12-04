@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IConfig } from 'config';
-import axios from 'axios';
 
 import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 import CustomLogger from '@crawl-web-api/module-log/customLogger';

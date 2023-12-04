@@ -57,7 +57,14 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     await this.client.close();
   }
 
-  public async sendKafkaMessage(
+  public sendKafkaMessage(topic: KAFKA_TOPIC_PRODUCER, key: string, data: any) {
+    this.client.send(topic, {
+      key: key,
+      value: data,
+    });
+  }
+
+  public async sendAsyncKafkaMessage(
     topic: KAFKA_TOPIC_PRODUCER,
     key: string,
     data: any,
@@ -71,7 +78,13 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     return result;
   }
 
-  async sendKafkaMessageWithoutKey(
+  async sendKafkaMessageWithoutKey(topic: KAFKA_TOPIC_PRODUCER, data: any) {
+    this.client.emit(topic, {
+      value: data,
+    });
+  }
+
+  async sendAsyncKafkaMessageWithoutKey(
     topic: KAFKA_TOPIC_PRODUCER,
     data: any,
   ): Promise<Observable<any>> {

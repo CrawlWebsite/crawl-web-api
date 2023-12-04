@@ -18,7 +18,7 @@ export class CrawlerController {
   ) {}
 
   @Post('/')
-  async crawl(@Res() res, @Query() query: any) {
+  async crawl() {
     this.kafkaService.sendKafkaMessageWithoutKey(
       KAFKA_TOPIC_PRODUCER.WEBSITE_CRAWL,
       {

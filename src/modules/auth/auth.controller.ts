@@ -29,7 +29,7 @@ import { JwtRefreshGuard } from './guard/jwtRefresh.guard';
 // Entity
 import { User } from '@crawl-web-api/entities';
 
-@Controller()
+@Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
   constructor(
