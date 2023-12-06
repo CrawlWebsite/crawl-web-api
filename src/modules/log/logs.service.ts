@@ -14,12 +14,12 @@ export default class LogsService {
   ) {}
 
   async createLog(log: CreateLogDto) {
-    const newLog = this.logsRepository.create(log);
-    await this.logsRepository.save(newLog, {
-      data: {
-        isCreatingLogs: true,
-      },
-    });
-    return newLog;
+    // const newLog = this.logsRepository.create(log);
+    // await this.logsRepository.save(newLog, {
+    //   data: {
+    //     isCreatingLogs: true,
+    //   },
+    // });
+    // return newLog;
   }
 }

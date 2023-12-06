@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  web-crawl-api:
+    container_name: web-crawl-api
+    image: vunam2000/crawl-web-api
+    build:
+      context: .
+    env_file:
+      - .env
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    networks:
+      - web-crawl-api
+ 
+networks:
+  web-crawl-api:
+    driver: bridge

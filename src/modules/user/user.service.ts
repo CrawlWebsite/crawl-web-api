@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 
 import { Role, Roles, User } from '@crawl-web-api/entities';
 
-import { UserGrpcService } from './user.grpc.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
 
 @Injectable()
@@ -17,8 +16,6 @@ export class UserService {
 
     @InjectRepository(Role)
     private roleRepository: Repository<Role>,
-
-    private readonly userGrpcService: UserGrpcService,
   ) {}
 
   async getByEmail(email: string) {
@@ -49,13 +46,9 @@ export class UserService {
   public async createUser(userData: CreateUserDto) {
     const { email, name, password, roles } = userData;
 
-    // Create a new user in user-service
-    const user = await this.userGrpcService.createUser({ email, name });
-    console.log(user);
-
     const newUser = new User();
-    newUser.userId = user.id;
-    newUser.email = user.email;
+    newUser.name = name;
+    newUser.email = email;
     newUser.password = password;
 
     let roleEntities = [];

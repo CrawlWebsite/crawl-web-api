@@ -1,6 +1,6 @@
 {
   "name": "@web-data-lake/crawl-web-api",
-  "version": "1.0.7",
+  "version": "1.0.0",
   "description": "",
   "author": "",
   "scripts": {
@@ -44,6 +44,7 @@
     "@types/cookie-parser": "^1.4.3",
     "@types/hapi__joi": "^17.1.8",
     "@types/passport-jwt": "^3.0.6",
+    "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
