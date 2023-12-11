@@ -1,4 +1,12 @@
-import { Controller, Get, Inject, Post, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { IConfig } from 'config';
 
@@ -7,6 +15,7 @@ import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 import { CrawlerService } from './crawler.service';
 import { KafkaService } from '@crawl-web-api/module-kafka/kafka.service';
 import { KAFKA_TOPIC_PRODUCER } from '@crawl-web-api/module-kafka/dto';
+import CrawlRegisterDto from './dto/crawlRegister.dto';
 
 @Controller('crawler')
 @ApiTags('crawler')
@@ -18,11 +27,15 @@ export class CrawlerController {
   ) {}
 
   @Post('/')
-  async crawl() {
+  async crawlRegister(@Body() data: CrawlRegisterDto) {
+    const { url, startPage, endPage } = data;
+
     this.kafkaService.sendKafkaMessageWithoutKey(
-      KAFKA_TOPIC_PRODUCER.WEBSITE_CRAWL,
+      KAFKA_TOPIC_PRODUCER.WEBSITE_CRAWL_REGISTER,
       {
-        url: 'http',
+        url,
+        startPage,
+        endPage,
       },
     );
 

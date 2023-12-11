@@ -29,7 +29,7 @@ export class WebPageService {
           cmd: `request.${cmd}`,
           url: path,
           postData,
-          maxTimeout: 10000,
+          maxTimeout: 60000,
         },
       });
 
