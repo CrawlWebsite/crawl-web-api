@@ -69,7 +69,6 @@ export class UserService {
 
     newUser.roles = roleEntities;
 
-    console.log(newUser);
     await this.usersRepository.save(newUser);
     return newUser;
   }

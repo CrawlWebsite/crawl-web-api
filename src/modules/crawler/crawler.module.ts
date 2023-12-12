@@ -11,6 +11,7 @@ import { CrawlerService } from './crawler.service';
 import { SaleModule } from '@crawl-web-api/module-sale/sale.module';
 import { ApartmentModule } from '@crawl-web-api/module-apartment/apartment.module';
 import { ApartmentSaleModule } from '@crawl-web-api/module-apartment-sale/apartmentSale.module';
+import { PublisherModule } from '@crawl-web-api/module-publisher/publisher.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ApartmentSaleModule } from '@crawl-web-api/module-apartment-sale/apartm
     SaleModule,
     ApartmentModule,
     ApartmentSaleModule,
+    PublisherModule,
   ],
   providers: [CrawlerService],
   controllers: [CrawlerController, CrawlerMessageController],

@@ -1,4 +1,4 @@
-import { Apartment, Sale } from '@crawl-web-api/entities';
+import { Apartment, Publisher, Sale } from '@crawl-web-api/entities';
 import { IsString, IsOptional } from 'class-validator';
 
 export class ApartmentSaleCreateDto {
@@ -14,9 +14,7 @@ export class ApartmentSaleCreateDto {
   @IsOptional()
   endDate: string;
 
-  @IsString()
-  @IsOptional()
-  publisher: string;
+  publisher: Publisher;
 
   apartment: Apartment;
 
