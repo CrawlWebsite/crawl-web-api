@@ -27,17 +27,50 @@ export class CrawlerController {
   ) {}
 
   @Post('/')
-  async crawlRegister(@Body() data: CrawlRegisterDto) {
-    const { url, startPage, endPage } = data;
+  async crawlRegister() {
+    // const { url, startPage, endPage } = data;
+    // console.log(data);
+    // this.kafkaService.sendKafkaMessageWithoutKey(
+    //   KAFKA_TOPIC_PRODUCER.WEBSITE_CRAWL_REGISTER,
+    //   {
+    //     url,
+    //     startPage,
+    //     endPage,
+    //   },
+    // );
 
-    this.kafkaService.sendKafkaMessageWithoutKey(
-      KAFKA_TOPIC_PRODUCER.WEBSITE_CRAWL_REGISTER,
-      {
-        url,
-        startPage,
-        endPage,
+    this.kafkaService.sendKafkaMessageWithoutKey('website.crawl.data' as any, {
+      apartmentAddress: {
+        city: 'city',
+        district: 'district',
+        address: 'address',
+        project: 'project',
       },
-    );
+      apartmentInfo: {
+        acreage: '100',
+        acreageUnit: 'm',
+        type: 'c',
+        legal: 'd',
+        legalStatus: 'deep',
+        apartmentFloor: '2',
+        numberOfBedRoom: '2',
+        numberOfToilet: '7',
+        pricePerSquareMeter: '37',
+        pricePerSquareMeterUnit: 'm',
+        price: '2',
+        priceUnit: 'ty',
+      },
+      sale: {
+        name: 'sale1',
+        phoneNumber: '123465',
+      },
+      salePost: {
+        url: 'http',
+        startDate: '2020-3',
+        endDate: '2020-3',
+        publisher: 'batdon',
+      },
+    });
 
     return;
   }

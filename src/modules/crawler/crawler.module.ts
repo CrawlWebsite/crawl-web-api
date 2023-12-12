@@ -8,9 +8,19 @@ import { CrawlerController } from './crawler.controller';
 import { CrawlerMessageController } from './crawler.message';
 
 import { CrawlerService } from './crawler.service';
+import { SaleModule } from '@crawl-web-api/module-sale/sale.module';
+import { ApartmentModule } from '@crawl-web-api/module-apartment/apartment.module';
+import { ApartmentSaleModule } from '@crawl-web-api/module-apartment-sale/apartmentSale.module';
 
 @Module({
-  imports: [ConfigModule, LoggerModule, KafkaModule],
+  imports: [
+    ConfigModule,
+    LoggerModule,
+    KafkaModule,
+    SaleModule,
+    ApartmentModule,
+    ApartmentSaleModule,
+  ],
   providers: [CrawlerService],
   controllers: [CrawlerController, CrawlerMessageController],
 })
