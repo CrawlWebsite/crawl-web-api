@@ -2,7 +2,6 @@ version: "3"
 
 services:
   craw-web-api:
-    platform: linux/arm64
     container_name: craw-web-api
     image: vunam2000/craw-web-api
     build:

@@ -37,6 +37,7 @@ COPY --chown=node:node --from=build /usr/src/app/package.json ./
 COPY --chown=node:node --from=build /usr/src/app/entrypoint.sh ./
 
 RUN chmod +x ./entrypoint.sh
+RUN apk add dos2unix && dos2unix ./entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
 
