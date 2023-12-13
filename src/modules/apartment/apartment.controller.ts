@@ -5,7 +5,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { ApartmentService } from './apartment.service';
 
 @Controller('apartment')
-@ApiTags('apartment')
+@ApiTags('Apartment')
 export class ApartmentController {
   constructor(private readonly apartmentService: ApartmentService) {}
 }

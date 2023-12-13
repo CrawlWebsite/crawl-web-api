@@ -10,10 +10,10 @@ export class ApartmentSale extends BaseEntity {
   @Column({ unique: true })
   public url: string;
 
-  @Column()
+  @Column({ nullable: true })
   public startDate: Date;
 
-  @Column()
+  @Column({ nullable: true })
   public endDate: Date;
 
   @OneToOne(() => Apartment, (apartment) => apartment.apartmentSale, {

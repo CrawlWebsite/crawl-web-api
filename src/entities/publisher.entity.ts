@@ -5,7 +5,7 @@ import { ApartmentSale } from './apartmentSale.entity';
 
 @Entity('publisher')
 export class Publisher extends BaseEntity {
-  @Column()
+  @Column({ unique: true })
   public hostname: string;
 
   @OneToMany(() => ApartmentSale, (apartmentSale) => apartmentSale.publisher)

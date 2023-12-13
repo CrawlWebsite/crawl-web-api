@@ -19,6 +19,15 @@ export class SaleService {
   async upsertSale(data: SaleCreateDto) {
     const { phoneNumber } = data;
 
+    if (!phoneNumber) {
+      this.logger.error(
+        'Sale phone number is required',
+        'Upsert Sale',
+        this.upsertSale.name,
+      );
+      return;
+    }
+
     await this.saleRepository.upsert(data, {
       conflictPaths: ['phoneNumber'],
       skipUpdateIfNoValuesChanged: true,

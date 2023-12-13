@@ -60,10 +60,17 @@ export class SeederService {
 
       await Promise.all(users);
 
-      this.logger.debug('Successfuly completed seeding users...');
+      this.logger.debug(
+        'Successfuly completed seeding users...',
+        this.seedUsers.name,
+      );
     } catch (error) {
       console.log(error);
-      this.logger.error('Failed seeding users...');
+      this.logger.error(
+        'Failed seeding users...',
+        error.stack,
+        this.seedUsers.name,
+      );
     }
   }
 }

@@ -37,6 +37,15 @@ async function bootstrap() {
         },
         consumer: {
           groupId: configService.get<string>('kafka.consumer_id'),
+          sessionTimeout: 60000,
+          heartbeatInterval: 40000,
+          maxWaitTimeInMs: 30000,
+          readUncommitted: true,
+          retry: {
+            initialRetryTime: 100, // 100 milliseconds - Initial retry delay
+            maxRetryTime: 30000, // 30 seconds - Maximum retry delay
+            retries: 10, // Number of retry attempts
+          },
         },
       },
     },

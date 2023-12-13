@@ -4,64 +4,64 @@ import { ApartmentSale } from './apartmentSale.entity';
 
 @Entity('apartments')
 export class Apartment extends BaseEntity {
-  @Column()
+  @Column({ nullable: true })
   public city: string;
 
-  @Column()
+  @Column({ nullable: true })
   public district: string;
 
-  @Column()
+  @Column({ nullable: true })
   public address: string;
 
-  @Column()
+  @Column({ nullable: true })
   public project: string;
 
-  @Column()
+  @Column('decimal', { precision: 6, scale: 2, nullable: true })
   public acreage: number;
 
-  @Column()
+  @Column({ nullable: true })
   public acreageUnit: string;
 
-  @Column()
+  @Column({ nullable: true })
   public type: string;
 
-  @Column()
+  @Column({ nullable: true })
   public legal: string;
 
-  @Column()
+  @Column({ nullable: true })
   public legalStatus: string;
 
-  @Column()
+  @Column({ nullable: true })
   public apartmentFloor: number;
 
-  @Column()
+  @Column({ nullable: true })
   public numberOfBedRoom: number;
 
-  @Column()
+  @Column({ nullable: true })
   public numberOfToilet: number;
 
-  @Column()
+  @Column({ nullable: true })
   public numberOfFloor: number;
 
-  @Column()
+  @Column('decimal', { precision: 6, scale: 2, nullable: true })
   public pricePerSquareMeter: number;
 
-  @Column()
+  @Column({ nullable: true })
   public pricePerSquareMeterUnit: string;
 
-  @Column()
+  @Column('decimal', { precision: 6, scale: 2, nullable: true })
   public price: number;
 
-  @Column()
+  @Column({ nullable: true })
   public priceUnit: string;
 
-  @Column()
+  @Column({ nullable: true })
   public balconyDirection: string;
 
-  @Column()
+  @Column({ nullable: true })
   public apartmentDirection: string;
 
-  @Column()
+  @Column({ nullable: true })
   public interior: string;
 
   @OneToOne(() => ApartmentSale, (apartmentSale) => apartmentSale.apartment)
