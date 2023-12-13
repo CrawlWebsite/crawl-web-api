@@ -17,19 +17,19 @@ export class WebPageService {
   async getPageContent(query) {
     try {
       const { cmd, path, postData } = query;
+      this.logger.log(`Get page content: ${path}`, this.getPageContent.name);
 
       const proxyUrl =
         this.configService.get<string>('flare_solverr.host') ||
         'http://localhost:8191/v1';
 
-      console.log(proxyUrl, query);
       const response = await axios(proxyUrl, {
         method: 'POST',
         data: {
           cmd: `request.${cmd}`,
           url: path,
           postData,
-          maxTimeout: 10000,
+          maxTimeout: 60000,
         },
       });
 

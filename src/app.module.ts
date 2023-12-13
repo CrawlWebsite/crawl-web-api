@@ -14,6 +14,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { WebPageModule } from '@crawl-web-api/module-web-page/webPage.module';
 import { CrawlerModule } from '@crawl-web-api/module-crawler/crawler.module';
+import { SaleModule } from '@crawl-web-api/module-sale/sale.module';
+import { ApartmentModule } from '@crawl-web-api/module-apartment/apartment.module';
+import { ApartmentSaleModule } from '@crawl-web-api/module-apartment-sale/apartmentSale.module';
 
 @Module({
   controllers: [AppController],
@@ -32,6 +35,9 @@ import { CrawlerModule } from '@crawl-web-api/module-crawler/crawler.module';
     UserModule,
     WebPageModule,
     CrawlerModule,
+    SaleModule,
+    ApartmentModule,
+    ApartmentSaleModule,
   ],
 })
 export class AppModule {

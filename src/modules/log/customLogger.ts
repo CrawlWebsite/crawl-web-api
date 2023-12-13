@@ -36,6 +36,7 @@ class CustomLogger extends ConsoleLogger {
       level: 'log',
     });
   }
+
   error(message: string, stack?: string, context?: string) {
     super.error.apply(this, [message, stack, `${this.context}.${context}`]);
     this.logsService.createLog({
