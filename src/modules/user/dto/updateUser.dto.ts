@@ -1,35 +1,40 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsEmail,
   IsString,
+  IsNotEmpty,
+  MinLength,
   IsObject,
   ValidateNested,
   IsOptional,
+  IsArray,
+  IsEnum,
 } from 'class-validator';
-
-class AddressDto {
-  @IsString()
-  @IsOptional()
-  @ApiProperty()
-  public street: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty()
-  public city: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty()
-  public country: string;
-}
+import { Roles } from 'src/entities/role.entity';
 
 export class UpdateUserDto {
-  @IsObject()
-  @ValidateNested()
-  @Type(() => AddressDto)
-  @ApiProperty()
-  address: AddressDto;
+  @IsEmail()
+  @ApiProperty({
+    name: 'email',
+  })
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    name: 'name',
+  })
+  name: string;
+
+  @IsArray()
+  @IsEnum(Roles, { each: true })
+  @ApiProperty({
+    name: 'roles',
+    default: ['admin'],
+    enum: ['systemadmin', 'admin', 'member'] as Roles[],
+  })
+  roles: string[];
 }
 
 export default UpdateUserDto;

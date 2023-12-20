@@ -1,6 +1,7 @@
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Role } from './role.entity';
 import { BaseEntity } from './base.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -11,12 +12,19 @@ export class User extends BaseEntity {
   public email: string;
 
   @Column()
+  @Exclude()
   public password: string;
 
   @Column({
     nullable: true,
   })
   public currentHashedRefreshToken?: string;
+
+  @Column({
+    default: false,
+  })
+  @Exclude()
+  public isDeleted: boolean;
 
   @ManyToMany(() => Role)
   @JoinTable({

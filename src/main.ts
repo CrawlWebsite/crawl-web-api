@@ -56,11 +56,13 @@ async function bootstrap() {
 
   app.useLogger(loggerService);
 
+  app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
     }),
   );
+
   microservice.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 

@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsString,
@@ -6,31 +7,41 @@ import {
   IsArray,
   IsEnum,
 } from 'class-validator';
-import { Roles } from '@crawl-web-api/entities';
+import { Roles } from 'src/entities/role.entity';
 
 export class CreateUserDto {
   @IsEmail()
+  @ApiProperty({
+    name: 'email',
+    default: 'test@example.com',
+  })
   email: string;
 
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({
+    name: 'name',
+    default: 'Test',
+  })
   name: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
+  @ApiProperty({
+    name: 'password',
+    default: 'password',
+  })
   password: string;
 
   @IsArray()
   @IsEnum(Roles, { each: true })
-  roles?: string[];
+  @ApiProperty({
+    name: 'roles',
+    default: ['admin'],
+    enum: ['systemadmin', 'admin', 'member'] as Roles[],
+  })
+  roles: string[];
 }
 
-export class CreateUserGrpcRequestDto {
-  email: string;
-  name: string;
-}
-
-export class CreateUserGrpcResponseDto extends CreateUserGrpcRequestDto {
-  id: number;
-}
+export default CreateUserDto;
