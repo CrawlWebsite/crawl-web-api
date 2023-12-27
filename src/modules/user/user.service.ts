@@ -33,10 +33,15 @@ export class UserService {
     );
   }
 
-  async getById(id: number) {
+  async getById(
+    id: number,
+    options?: { relations?: string[]; ignoreRelations?: boolean },
+  ) {
+    const { relations, ignoreRelations } = options || {};
+
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: ['roles'],
+      relations: ignoreRelations ? [] : relations ?? ['roles'],
     });
 
     return user;
@@ -57,6 +62,7 @@ export class UserService {
       isDeleted,
     });
 
+    console.log(page, perPage, isDeleted);
     getUserQuery.skip((page - 1) * perPage).take(perPage);
     getUserQuery.leftJoinAndSelect('user.roles', 'roles');
 

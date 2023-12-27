@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsEmail, IsOptional, IsNumber } from 'class-validator';
+import { IsEmail, IsOptional, IsNumber, Min } from 'class-validator';
 
 export class GetUserDto {
   @IsEmail()
@@ -14,6 +14,7 @@ export class GetUserDto {
   @IsNumber()
   @IsOptional()
   @Type(() => Number)
+  @Min(1)
   @ApiProperty({
     name: 'page',
     required: false,
@@ -23,6 +24,7 @@ export class GetUserDto {
   @IsNumber()
   @IsOptional()
   @Type(() => Number)
+  @Min(1)
   @ApiProperty({
     name: 'perPage',
     required: false,

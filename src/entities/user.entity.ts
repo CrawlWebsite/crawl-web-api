@@ -1,7 +1,8 @@
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { Role } from './role.entity';
 import { BaseEntity } from './base.entity';
 import { Exclude } from 'class-transformer';
+import { CrawlProcess } from './crawlProcess.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -39,4 +40,7 @@ export class User extends BaseEntity {
     },
   })
   roles: Role[];
+
+  @OneToMany(() => CrawlProcess, (crawlProcess) => crawlProcess.owner)
+  crawlProcesses: CrawlProcess[];
 }

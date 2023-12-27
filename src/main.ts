@@ -27,30 +27,30 @@ async function bootstrap() {
   const configService = app.get<IConfig>(CONFIG);
   const loggerService = app.get(CustomLogger);
 
-  const microservice = app.connectMicroservice<MicroserviceOptions>(
-    {
-      transport: Transport.KAFKA,
-      options: {
-        client: {
-          clientId: configService.get<string>('kafka.kafka_client_id'),
-          brokers: configService.get<string>('kafka.kafka_brokers').split(','),
-        },
-        consumer: {
-          groupId: configService.get<string>('kafka.consumer_id'),
-          sessionTimeout: 60000,
-          heartbeatInterval: 40000,
-          maxWaitTimeInMs: 30000,
-          readUncommitted: true,
-          retry: {
-            initialRetryTime: 100, // 100 milliseconds - Initial retry delay
-            maxRetryTime: 30000, // 30 seconds - Maximum retry delay
-            retries: 10, // Number of retry attempts
-          },
-        },
-      },
-    },
-    { inheritAppConfig: true },
-  );
+  // const microservice = app.connectMicroservice<MicroserviceOptions>(
+  //   {
+  //     transport: Transport.KAFKA,
+  //     options: {
+  //       client: {
+  //         clientId: configService.get<string>('kafka.kafka_client_id'),
+  //         brokers: configService.get<string>('kafka.kafka_brokers').split(','),
+  //       },
+  //       consumer: {
+  //         groupId: configService.get<string>('kafka.consumer_id'),
+  //         sessionTimeout: 60000,
+  //         heartbeatInterval: 40000,
+  //         maxWaitTimeInMs: 30000,
+  //         readUncommitted: true,
+  //         retry: {
+  //           initialRetryTime: 100, // 100 milliseconds - Initial retry delay
+  //           maxRetryTime: 30000, // 30 seconds - Maximum retry delay
+  //           retries: 10, // Number of retry attempts
+  //         },
+  //       },
+  //     },
+  //   },
+  //   { inheritAppConfig: true },
+  // );
 
   app.setGlobalPrefix(configService.get<string>('server.base_url'));
 
@@ -63,7 +63,7 @@ async function bootstrap() {
     }),
   );
 
-  microservice.useGlobalPipes(new ValidationPipe());
+  // microservice.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

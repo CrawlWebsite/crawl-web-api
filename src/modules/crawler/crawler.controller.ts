@@ -5,7 +5,9 @@ import {
   Inject,
   Post,
   Query,
+  Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { IConfig } from 'config';
@@ -17,6 +19,7 @@ import { KafkaService } from '@crawl-web-api/module-kafka/kafka.service';
 import { KAFKA_TOPIC_PRODUCER } from '@crawl-web-api/module-kafka/dto';
 import CrawlRegisterDto from './dto/crawlRegister.dto';
 import CustomLogger from '@crawl-web-api/module-log/customLogger';
+import { JwtAuthGuard } from '@crawl-web-api/module-auth/guard';
 
 @Controller('crawler')
 @ApiTags('Crawler')
@@ -28,21 +31,17 @@ export class CrawlerController {
     @Inject(CONFIG) private readonly configService: IConfig,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('/')
-  async crawlRegister(@Body() data: CrawlRegisterDto) {
+  async crawlRegister(@Req() request, @Body() data: CrawlRegisterDto) {
     this.logger.log(`Crawl registration ${data}`, this.crawlRegister.name);
+    const { user } = request;
 
-    const { url, startPage, endPage } = data;
-
-    this.kafkaService.sendKafkaMessageWithoutKey(
-      KAFKA_TOPIC_PRODUCER.WEBSITE_CRAWL_REGISTER,
-      {
-        url,
-        startPage,
-        endPage,
-      },
+    const newCrawlProcess = await this.crawlerService.registerCrawler(
+      user?.id,
+      data,
     );
 
-    return;
+    return newCrawlProcess;
   }
 }
