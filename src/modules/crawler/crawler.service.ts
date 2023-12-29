@@ -11,7 +11,7 @@ import { UserService } from '@crawl-web-api/module-user/user.service';
 
 import { User, CrawlProcess } from '@crawl-web-api/entities';
 
-import CrawlRegisterDto from './dto/crawlRegister.dto';
+import RegisterCrawlerProcessDto from './dto/registerCrawlerProcess.dto';
 
 @Injectable()
 export class CrawlerService {
@@ -30,7 +30,11 @@ export class CrawlerService {
     this.logger.setContext(CrawlerService.name);
   }
 
-  async registerCrawler(ownerId: number, data: CrawlRegisterDto) {
+  async getCrawlProcesses() {
+
+  }
+
+  async registerCrawler(ownerId: number, data: RegisterCrawlerProcessDto) {
     const { url, startPage, endPage } = data;
 
     const owner = await this.userService.getById(ownerId, {

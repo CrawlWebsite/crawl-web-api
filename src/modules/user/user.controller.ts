@@ -35,7 +35,7 @@ export class UserController {
     return users;
   }
 
-  @Get('/deleted')
+  @Get('/is-deleted')
   @ApiResponse({
     status: 200,
     description: 'Get user successfully',
