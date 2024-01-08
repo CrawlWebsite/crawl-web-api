@@ -4,20 +4,25 @@ import { In, Repository } from 'typeorm';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcryptjs');
 
+import { BaseService } from '@crawl-web-api/module-base/base.service';
+
+import { Role, Roles, User } from '@crawl-web-api/entities';
+
 import CreateUserDto from './dto/createUser.dto';
 import UpdateUserDto from './dto/updateUser.dto';
 import GetUserDto from './dto/getUser.dto';
-import { Role, Roles, User } from '@crawl-web-api/entities';
 
 @Injectable()
-export class UserService {
+export class UserService extends BaseService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
 
     @InjectRepository(Role)
     private roleRepository: Repository<Role>,
-  ) {}
+  ) {
+    super();
+  }
 
   async getByEmail(email: string) {
     const user = await this.userRepository.findOne({
@@ -48,7 +53,7 @@ export class UserService {
   }
 
   public async getUsers(queries: GetUserDto) {
-    const { email, page = 1, perPage = 30, isDeleted = false } = queries;
+    const { email, isDeleted = false, page, pageSize } = queries;
 
     const getUserQuery = this.userRepository.createQueryBuilder('user');
 
@@ -62,18 +67,12 @@ export class UserService {
       isDeleted,
     });
 
-    console.log(page, perPage, isDeleted);
-    getUserQuery.skip((page - 1) * perPage).take(perPage);
-    getUserQuery.leftJoinAndSelect('user.roles', 'roles');
-
-    const [users, total] = await getUserQuery.getManyAndCount();
-
-    return {
-      items: users,
+    const results = this.pagination.paginate(getUserQuery, {
       page,
-      perPage,
-      total,
-    };
+      pageSize,
+    });
+
+    return results;
   }
 
   public async createUser(userData: CreateUserDto) {

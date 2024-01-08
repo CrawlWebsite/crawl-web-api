@@ -6,7 +6,7 @@ import { faker } from '@faker-js/faker';
 const bcrypt = require('bcryptjs');
 
 // Entity
-import { User, Role } from '@crawl-web-api/entities';
+import { User, Role, Roles, CrawlProcess } from '@crawl-web-api/entities';
 
 @Injectable()
 export class SeederService {
@@ -18,6 +18,9 @@ export class SeederService {
 
     @InjectRepository(User)
     private userRepo: Repository<User>,
+
+    @InjectRepository(CrawlProcess)
+    private crawlProcessRepo: Repository<CrawlProcess>,
   ) {}
 
   async seed() {
@@ -26,38 +29,52 @@ export class SeederService {
 
   async seedUsers() {
     try {
+      // Delete all crawl process
+      await this.crawlProcessRepo.delete({});
       // Delete all role
       await this.roleRepo.delete({});
       // Detele all user
       await this.userRepo.delete({});
 
       // Create new role
-      const role1 = new Role();
-      role1.name = 'admin';
-      const role2 = new Role();
-      role2.name = 'member';
-      const role3 = new Role();
-      role3.name = 'systemadmin';
-      const roles = await Promise.all([
-        this.roleRepo.save(role1),
-        this.roleRepo.save(role2),
-        this.roleRepo.save(role3),
+      const roleAdmin = new Role();
+      roleAdmin.name = Roles.ADMIN;
+      const roleMember = new Role();
+      roleMember.name = Roles.MEMBER;
+      const roleSystemAdmin = new Role();
+      roleSystemAdmin.name = Roles.SYSTEMADMIN;
+
+      await Promise.all([
+        this.roleRepo.save(roleAdmin),
+        this.roleRepo.save(roleMember),
+        this.roleRepo.save(roleSystemAdmin),
       ]);
       this.logger.debug('Successfuly completed seeding roles...');
 
       // Create new user
       const users = [];
       const hashedPassword = await bcrypt.hash('123456', 10);
-      roles.forEach((role) => {
-        const user = new User();
 
-        user.name = faker.name.fullName();
-        user.email = faker.internet.email();
-        user.roles = [role];
-        user.password = hashedPassword;
+      const admin = new User();
+      admin.name = faker.name.fullName();
+      admin.email = 'admin@example.com';
+      admin.roles = [roleAdmin];
+      admin.password = hashedPassword;
+      users.push(this.userRepo.save(admin));
 
-        users.push(this.userRepo.save(user));
-      });
+      const member = new User();
+      member.name = faker.name.fullName();
+      member.email = 'member@example.com';
+      member.roles = [roleMember];
+      member.password = hashedPassword;
+      users.push(this.userRepo.save(member));
+
+      const systemAdmin = new User();
+      systemAdmin.name = faker.name.fullName();
+      systemAdmin.email = 'systemadmin@example.com';
+      systemAdmin.roles = [roleSystemAdmin];
+      systemAdmin.password = hashedPassword;
+      users.push(this.userRepo.save(systemAdmin));
 
       await Promise.all(users);
 

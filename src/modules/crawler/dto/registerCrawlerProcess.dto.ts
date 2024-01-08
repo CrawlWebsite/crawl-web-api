@@ -1,6 +1,6 @@
 import { IsString, IsInt, IsOptional } from 'class-validator';
 
-export class RegisterCrawlerProcessDto {
+export class RegisterCrawlProcessDto {
   @IsString()
   url: string;
 
@@ -13,4 +13,4 @@ export class RegisterCrawlerProcessDto {
   endPage: number;
 }
 
-export default RegisterCrawlerProcessDto;
+export default RegisterCrawlProcessDto;

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { User } from './user.entity';
 
@@ -41,4 +41,12 @@ export class CrawlProcess extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.crawlProcesses)
   owner: User;
+
+  @ManyToOne(() => CrawlProcess, (mainProcess) => mainProcess.subProcesses, {
+    nullable: true,
+  })
+  mainProcess: CrawlProcess;
+
+  @OneToMany(() => CrawlProcess, (subProcesses) => subProcesses.mainProcess)
+  subProcesses: CrawlProcess[];
 }

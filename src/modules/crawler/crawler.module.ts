@@ -15,6 +15,7 @@ import { User, CrawlProcess } from '@crawl-web-api/entities';
 import { CrawlerController } from './crawler.controller';
 import { CrawlerMessageController } from './crawler.message';
 import { CrawlerService } from './crawler.service';
+import { CrawlerAdminController } from './crawler.admin.controller';
 
 @Module({
   imports: [
@@ -29,6 +30,10 @@ import { CrawlerService } from './crawler.service';
     TypeOrmModule.forFeature([User, CrawlProcess]),
   ],
   providers: [CrawlerService],
-  controllers: [CrawlerController, CrawlerMessageController],
+  controllers: [
+    CrawlerAdminController,
+    CrawlerController,
+    CrawlerMessageController,
+  ],
 })
 export class CrawlerModule {}

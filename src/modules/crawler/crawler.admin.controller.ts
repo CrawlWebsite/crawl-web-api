@@ -1,10 +1,8 @@
 import {
-  Body,
   Controller,
   Get,
   Inject,
   Param,
-  Post,
   Query,
   Req,
   UseGuards,
@@ -16,69 +14,58 @@ import { IConfig } from 'config';
 import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 import { KafkaService } from '@crawl-web-api/module-kafka/kafka.service';
 import CustomLogger from '@crawl-web-api/module-log/customLogger';
-import { JwtAuthGuard } from '@crawl-web-api/module-auth/guard';
 import { CrawlerService } from './crawler.service';
 
-import RegisterCrawlProcessDto from './dto/registerCrawlerProcess.dto';
 import { RolePermission } from '@crawl-web-api/module-auth/guard/roles.metadata';
 import { Roles } from '@crawl-web-api/entities';
 import {
-  GetCrawlProcessByUserDto,
+  GetCrawlProcessByAdminDto,
   GetSubCrawlProcessByAdminDto,
 } from './dto/getCrawlerProcess.dto';
-import { BaseController } from '@crawl-web-api/module-base/base.controller';
+import { JwtAuthGuard } from '@crawl-web-api/module-auth/guard';
 import { RoleGuard } from '@crawl-web-api/module-auth/guard/role.guard';
 
-@ApiTags('Crawler')
-@Controller('crawler')
-export class CrawlerController extends BaseController {
+@ApiTags('Crawler Admin')
+@Controller('admin/crawler')
+export class CrawlerAdminController {
   constructor(
     private readonly logger: CustomLogger,
     private readonly crawlerService: CrawlerService,
     private readonly kafkaService: KafkaService,
     @Inject(CONFIG) private readonly configService: IConfig,
-  ) {
-    super();
-  }
+  ) {}
 
-  @RolePermission(Roles.MEMBER)
+  @RolePermission(Roles.ADMIN)
   @UseGuards(RoleGuard)
   @UseGuards(JwtAuthGuard)
   @Get('/crawler-process')
-  async getCrawlerProcessesByUser(
+  async getCrawlerProcessesByAdmin(
     @Req() request,
-    @Query() queries: GetCrawlProcessByUserDto,
+    @Query() queries: GetCrawlProcessByAdminDto,
   ) {
     this.logger.log(
-      `Get crawler processes by user`,
-      this.getCrawlerProcessesByUser.name,
+      `Get crawler processes by admin ${queries}`,
+      this.getCrawlerProcessesByAdmin.name,
     );
 
-    const user = request.user;
-
-    const result = await this.crawlerService.getCrawlProcesses({
-      ...queries,
-      userIds: [user?.id],
-    });
+    const result = await this.crawlerService.getCrawlProcesses(queries);
 
     return result;
   }
 
-  @RolePermission(Roles.MEMBER)
+  @RolePermission(Roles.ADMIN)
   @UseGuards(RoleGuard)
   @UseGuards(JwtAuthGuard)
   @Get('/crawler-process/:crawlerProcessId/sub')
-  async getSubCrawlerProcessesByUser(
+  async getSubCrawlerProcessesByAdmin(
     @Req() request,
     @Param() params: { crawlerProcessId: number },
     @Query() queries: GetSubCrawlProcessByAdminDto,
   ) {
     this.logger.log(
-      `Get crawler sub processes by user ${queries}`,
-      this.getCrawlerProcessesByUser.name,
+      `Get crawler sub processes by admin ${queries}`,
+      this.getCrawlerProcessesByAdmin.name,
     );
-
-    const user = request.user;
     const { crawlerProcessId } = params;
 
     if (!crawlerProcessId) {
@@ -91,24 +78,9 @@ export class CrawlerController extends BaseController {
       crawlerProcessId,
       {
         ...queries,
-        userIds: [user?.id],
       },
     );
 
     return result;
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('/crawler-process')
-  async crawlRegister(@Req() request, @Body() data: RegisterCrawlProcessDto) {
-    this.logger.log(`Crawl registration ${data}`, this.crawlRegister.name);
-    const { user } = request;
-
-    const newCrawlProcess = await this.crawlerService.registerCrawler(
-      user?.id,
-      data,
-    );
-
-    return newCrawlProcess;
   }
 }

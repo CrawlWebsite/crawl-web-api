@@ -8,17 +8,37 @@ import {
   Post,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import UpdateUserDto from './dto/updateUser.dto';
 import GetUserDto from './dto/getUser.dto';
 import CreateUserDto from './dto/createUser.dto';
 import { UserService } from './user.service';
+import { JwtAuthGuard } from '@crawl-web-api/module-auth/guard';
 
 @Controller('user')
 @ApiTags('User')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get('/info')
+  @ApiResponse({
+    status: 200,
+    description: 'Get user successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Get user unsuccessfully',
+  })
+  @UseGuards(JwtAuthGuard)
+  async getCurrentUser(@Req() request) {
+    const { user } = request;
+
+    const userInfo = await this.userService.getById(user?.id);
+
+    return userInfo;
+  }
 
   @Get('/')
   @ApiResponse({
@@ -98,7 +118,7 @@ export class UserController {
   @ApiParam({
     name: 'userId',
     required: true,
-    type: String,
+    type: Number,
   })
   @ApiResponse({
     status: 200,

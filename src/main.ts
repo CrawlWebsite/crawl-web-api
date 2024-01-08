@@ -56,7 +56,10 @@ async function bootstrap() {
 
   app.useLogger(loggerService);
 
-  app.enableCors();
+  app.enableCors({
+    origin: configService.get<string>('server.cors_domains').split(','),
+    credentials: true,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -71,7 +74,9 @@ async function bootstrap() {
 
   // Catch exception
   const httpAdapter = app.get(HttpAdapterHost);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({ forbidNonWhitelisted: true, transform: true }),
+  );
   app.useGlobalFilters(new AllExceptionsFilter(loggerService, httpAdapter));
 
   // Swagger
@@ -82,7 +87,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api/docs', app, document);
 
   await app.startAllMicroservices();
   await app.listen(configService.get<string>('server.port'));

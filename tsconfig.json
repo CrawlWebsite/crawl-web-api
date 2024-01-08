@@ -21,7 +21,8 @@
       "@crawl-web-api/module-*": ["src/modules/*"],
       "@crawl-web-api/config-*": ["src/configs/*"],
       "@crawl-web-api/entities": ["src/entities"],
-      "@crawl-web-api/utils/*": ["src/utils/*"]
+      "@crawl-web-api/utils/*": ["src/utils/*"],
+      "@crawl-web-api/common/*": ["src/common/*"]
     }
   }
 }

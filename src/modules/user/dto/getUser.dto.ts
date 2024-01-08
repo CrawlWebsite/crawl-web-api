@@ -1,8 +1,9 @@
+import { PaginationDto } from '@crawl-web-api/common/pagination';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsEmail, IsOptional, IsNumber, Min } from 'class-validator';
 
-export class GetUserDto {
+export class GetUserDto extends PaginationDto {
   @IsEmail()
   @IsOptional()
   @ApiProperty({
