@@ -1,11 +1,11 @@
 import { Injectable, ConsoleLogger, Inject } from '@nestjs/common';
 import { ConsoleLoggerOptions } from '@nestjs/common/services/console-logger.service';
 import { IConfig } from 'config';
-
 import getLogLevels from '@crawl-web-api/utils/getLogLevels';
 import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 
 import LogsService from './logs.service';
+import { Logger } from 'log4js';
 
 @Injectable()
 class CustomLogger extends ConsoleLogger {
@@ -16,6 +16,7 @@ class CustomLogger extends ConsoleLogger {
     options: ConsoleLoggerOptions,
     @Inject(CONFIG) private readonly configService: IConfig,
     logsService: LogsService,
+    @Inject('Logger') private readonly logger: Logger,
   ) {
     const environment = configService.get('env');
 
@@ -24,12 +25,16 @@ class CustomLogger extends ConsoleLogger {
       logLevels: getLogLevels(environment === 'production'),
     });
 
+    console.log('4444');
+    this.logger.info({ message: 'Logging ...' });
     this.logsService = logsService;
   }
 
   log(message: string, context?: string) {
     super.log.apply(this, [message, `${this.context}.${context}`]);
+    this.logger.info({ message });
 
+    
     this.logsService.createLog({
       message,
       context,

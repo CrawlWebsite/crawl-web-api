@@ -8,10 +8,7 @@ import { CreateLogDto } from './dto/createLog.dto';
 
 @Injectable()
 export default class LogsService {
-  constructor(
-    @InjectRepository(Log)
-    private logsRepository: Repository<Log>,
-  ) {}
+  constructor() {}
 
   async createLog(log: CreateLogDto) {
     // const newLog = this.logsRepository.create(log);
