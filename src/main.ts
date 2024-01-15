@@ -8,8 +8,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import { IConfig } from 'config';
 
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
-
 import getLogLevels from '@crawl-web-api/utils/getLogLevels';
 
 import { AllExceptionsFilter } from '@crawl-web-api/config-exceptions';
@@ -17,6 +15,7 @@ import { TransformInterceptor } from '@crawl-web-api/config-interceptors';
 import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 
 import { AppModule } from './app.module';
+import NestjsLoggerServiceAdapter from '@crawl-web-api/module-log/nestjsLoggerServiceAdapter';
 
 async function bootstrap() {
   // Logger
@@ -25,7 +24,7 @@ async function bootstrap() {
     bufferLogs: true,
   });
   const configService = app.get<IConfig>(CONFIG);
-  const loggerService = app.get(CustomLogger);
+  const loggerService = app.get(NestjsLoggerServiceAdapter);
 
   // const microservice = app.connectMicroservice<MicroserviceOptions>(
   //   {

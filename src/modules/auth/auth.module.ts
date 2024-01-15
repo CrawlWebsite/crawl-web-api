@@ -13,9 +13,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 import { JwtStrategy } from './guard/jwt.strategy';
+import { LoggerModule } from '@crawl-web-api/module-log/logger.module';
 
 @Module({
   imports: [
+    LoggerModule,
     PassportModule,
     ConfigModule,
     UserModule,

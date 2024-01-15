@@ -13,7 +13,7 @@ import { IConfig } from 'config';
 // Service
 import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 import { KafkaService } from '@crawl-web-api/module-kafka/kafka.service';
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 import { CrawlerService } from './crawler.service';
 
 import { RolePermission } from '@crawl-web-api/module-auth/guard/roles.metadata';
@@ -43,10 +43,7 @@ export class CrawlerAdminController {
     @Req() request,
     @Query() queries: GetCrawlProcessByAdminDto,
   ) {
-    this.logger.log(
-      `Get crawler processes by admin ${queries}`,
-      this.getCrawlerProcessesByAdmin.name,
-    );
+    this.logger.info(`Get crawler processes by admin ${queries}`);
 
     const result = await this.crawlerService.getCrawlProcesses(queries);
 
@@ -62,10 +59,7 @@ export class CrawlerAdminController {
     @Param() params: { crawlerProcessId: number },
     @Query() queries: GetSubCrawlProcessByAdminDto,
   ) {
-    this.logger.log(
-      `Get crawler sub processes by admin ${queries}`,
-      this.getCrawlerProcessesByAdmin.name,
-    );
+    this.logger.info(`Get crawler sub processes by admin ${queries}`);
     const { crawlerProcessId } = params;
 
     if (!crawlerProcessId) {

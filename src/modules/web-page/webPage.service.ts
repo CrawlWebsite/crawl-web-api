@@ -3,21 +3,19 @@ import { IConfig } from 'config';
 import axios from 'axios';
 
 import { CONFIG } from '@crawl-web-api/module-config/config.provider';
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 
 @Injectable()
 export class WebPageService {
   constructor(
     @Inject(CONFIG) private readonly configService: IConfig,
     private readonly logger: CustomLogger,
-  ) {
-    this.logger.setContext(WebPageService.name);
-  }
+  ) {}
 
   async getPageContent(query) {
     try {
       const { cmd, path, postData } = query;
-      this.logger.log(`Get page content: ${path}`, this.getPageContent.name);
+      this.logger.info(`Get page content: ${path}`);
 
       const proxyUrl =
         this.configService.get<string>('flare_solverr.host') ||

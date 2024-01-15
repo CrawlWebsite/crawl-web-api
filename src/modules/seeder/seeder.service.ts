@@ -7,11 +7,12 @@ const bcrypt = require('bcryptjs');
 
 // Entity
 import { User, Role, Roles, CrawlProcess } from '@crawl-web-api/entities';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 
 @Injectable()
 export class SeederService {
   constructor(
-    private readonly logger: Logger,
+    private readonly logger: CustomLogger,
 
     @InjectRepository(Role)
     private roleRepo: Repository<Role>,
@@ -78,17 +79,9 @@ export class SeederService {
 
       await Promise.all(users);
 
-      this.logger.debug(
-        'Successfuly completed seeding users...',
-        this.seedUsers.name,
-      );
+      this.logger.debug('Successfuly completed seeding users...');
     } catch (error) {
-      console.log(error);
-      this.logger.error(
-        'Failed seeding users...',
-        error.stack,
-        this.seedUsers.name,
-      );
+      this.logger.error('Failed seeding users...', error.stack);
     }
   }
 }

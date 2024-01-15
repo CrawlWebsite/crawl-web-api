@@ -3,7 +3,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 
 import { DatabaseModule } from '@crawl-web-api/module-database/database.module';
-import { LoggerModule } from '@crawl-web-api/module-log/logs.module';
+import { LoggerModule } from '@crawl-web-api/module-log/logger.module';
 import { AuthModule } from '@crawl-web-api/module-auth/auth.module';
 import { UserModule } from '@crawl-web-api/module-user/user.module';
 
@@ -17,6 +17,7 @@ import { CrawlerModule } from '@crawl-web-api/module-crawler/crawler.module';
 import { SaleModule } from '@crawl-web-api/module-sale/sale.module';
 import { ApartmentModule } from '@crawl-web-api/module-apartment/apartment.module';
 import { ApartmentSaleModule } from '@crawl-web-api/module-apartment-sale/apartmentSale.module';
+import { LocalStorageModule } from '@crawl-web-api/module-local-storage/localStorage.module';
 
 @Module({
   controllers: [AppController],
@@ -28,6 +29,7 @@ import { ApartmentSaleModule } from '@crawl-web-api/module-apartment-sale/apartm
     },
   ],
   imports: [
+    LocalStorageModule,
     LoggerModule,
     ConfigModule,
     DatabaseModule,
