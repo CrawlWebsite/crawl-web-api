@@ -65,6 +65,8 @@
     "winston": "^3.7.2"
   },
   "devDependencies": {
+    "@automock/adapters.nestjs": "^2.1.0",
+    "@automock/jest": "^2.1.0",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
@@ -104,6 +106,13 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@crawl-web-api/module-(.*)$": "<rootDir>/modules/$1",
+      "^@crawl-web-api/config-(.*)$": "<rootDir>/configs/$1",
+      "^@crawl-web-api/entities$": "<rootDir>/entities",
+      "^@crawl-web-api/utils-(.*)$": "<rootDir>/utils/$1",
+      "^@crawl-web-api/common/(.*)$": "<rootDir>/common/$1"
+    }
   }
 }

@@ -6,13 +6,13 @@ export class PaginationDto {
   @IsInt()
   @Min(1)
   @IsOptional()
-  public page: number;
+  public page?: number;
 
   @Type(() => Number)
   @IsInt()
   @Min(1)
   @IsOptional()
-  public pageSize: number;
+  public pageSize?: number;
 }
 
 export class PaginationResultDto {
