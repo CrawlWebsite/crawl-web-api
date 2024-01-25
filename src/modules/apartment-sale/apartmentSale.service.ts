@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApartmentSale } from '@crawl-web-api/entities';
 import { toDateOrNull } from '@crawl-web-api/utils/date';
@@ -13,19 +13,13 @@ export class ApartmentSaleService {
     private readonly logger: CustomLogger,
     @InjectRepository(ApartmentSale)
     private apartmentSaleRepository: Repository<ApartmentSale>,
-  ) {
-    this.logger.setContext(ApartmentSaleService.name);
-  }
+  ) {}
 
   async createApartmentSale(data: ApartmentSaleCreateDto) {
     const { url } = data;
 
     if (!url) {
-      this.logger.error(
-        'Sale url is required',
-        'Create Apartment Sale',
-        this.createApartmentSale.name,
-      );
+      this.logger.error('Sale url is required');
       return;
     }
 

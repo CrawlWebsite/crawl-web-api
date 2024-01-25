@@ -5,7 +5,7 @@ import { IConfig } from 'config';
 
 import { BaseService } from '@crawl-web-api/module-base/base.service';
 import { CONFIG } from '@crawl-web-api/module-config/config.provider';
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 import { KafkaService } from '@crawl-web-api/module-kafka/kafka.service';
 import { KAFKA_TOPIC_PRODUCER } from '@crawl-web-api/module-kafka/dto';
 import { UserService } from '@crawl-web-api/module-user/user.service';
@@ -33,7 +33,6 @@ export class CrawlerService extends BaseService {
     private crawlProcessRepository: Repository<CrawlProcess>,
   ) {
     super();
-    this.logger.setContext(CrawlerService.name);
   }
 
   async getCrawlProcesses(data: GetCrawlProcessService) {
@@ -72,7 +71,6 @@ export class CrawlerService extends BaseService {
   ) {
     const { page, pageSize, userIds } = queries;
 
-    console.log(mainProcessId, { queries });
     const mainProcess = await this.getCrawlProcessById(mainProcessId);
 
     if (!mainProcess) {

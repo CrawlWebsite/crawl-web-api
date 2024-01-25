@@ -10,7 +10,7 @@ import { SaleService } from '@crawl-web-api/module-sale/sale.service';
 import { ApartmentService } from '@crawl-web-api/module-apartment/apartment.service';
 import { ApartmentSaleService } from '@crawl-web-api/module-apartment-sale/apartmentSale.service';
 import { PublisherService } from '@crawl-web-api/module-publisher/publisher.service';
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 
 @Controller()
 export class CrawlerMessageController {
@@ -22,19 +22,14 @@ export class CrawlerMessageController {
     private readonly apartmentService: ApartmentService,
     private readonly apartmentSaleService: ApartmentSaleService,
     private readonly publisherService: PublisherService,
-  ) {
-    this.logger.setContext(CrawlerMessageController.name);
-  }
+  ) {}
 
   @MessagePattern(KAFKA_TOPIC_CONSUMER.WEBSITE_CRAWL_DATA)
   async streamWebsiteData(
     @Payload('value', ValidationPipe) payload: CrawlApartmentDataDto,
   ) {
     try {
-      this.logger.log(
-        `Streaming data ${JSON.stringify(payload)}`,
-        this.streamWebsiteData.name,
-      );
+      this.logger.info(`Streaming data ${JSON.stringify(payload)}`);
 
       const {
         publisher: publisherData,
@@ -68,7 +63,7 @@ export class CrawlerMessageController {
 
       return;
     } catch (err) {
-      this.logger.error(err, err.stack, this.streamWebsiteData.name);
+      this.logger.error(err, err.stack);
       throw new RpcException(err);
     }
   }

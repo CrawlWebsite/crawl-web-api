@@ -7,7 +7,7 @@ import { Log } from '@crawl-web-api/entities';
 import { CreateLogDto } from './dto/createLog.dto';
 
 @Injectable()
-export default class LogsService {
+export default class LoggerService {
   constructor(
     @InjectRepository(Log)
     private logsRepository: Repository<Log>,

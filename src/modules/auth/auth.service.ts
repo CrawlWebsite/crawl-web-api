@@ -8,6 +8,8 @@ import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 import { UserService } from '@crawl-web-api/module-user/user.service';
 
 import { RegisterDto } from './dto/register.dto';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
+import { TokenPayload } from './interfaces/tokenPayload.interface';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +17,7 @@ export class AuthService {
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,
     @Inject(CONFIG) private readonly configService: IConfig,
+    private readonly logger: CustomLogger,
   ) {}
 
   public async register(registrationData: RegisterDto) {
@@ -30,6 +33,9 @@ export class AuthService {
     try {
       const user = await this.usersService.getByEmail(email);
       await this.verifyPassword(plainTextPassword, user.password);
+
+      this.logger.info('User verified');
+
       return user;
     } catch (error) {
       throw new HttpException(

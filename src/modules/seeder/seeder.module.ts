@@ -7,9 +7,11 @@ import { DatabaseModule } from '@crawl-web-api/module-database/database.module';
 import { ConfigModule } from '@crawl-web-api/module-config/config.module';
 
 import { SeederService } from './seeder.service';
+import { LoggerModule } from '@crawl-web-api/module-log/logger.module';
 
 @Module({
   imports: [
+    LoggerModule,
     ConfigModule,
     DatabaseModule,
     TypeOrmModule.forFeature([User, Role, CrawlProcess]),
