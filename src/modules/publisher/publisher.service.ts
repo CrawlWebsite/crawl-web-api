@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Publisher } from '@crawl-web-api/entities';
 import { Repository } from 'typeorm';
@@ -13,19 +13,13 @@ export class PublisherService {
     private readonly logger: CustomLogger,
     @InjectRepository(Publisher)
     private publisherRepository: Repository<Publisher>,
-  ) {
-    this.logger.setContext(PublisherService.name);
-  }
+  ) {}
 
   async createPublisher(data: PublisherCreateDto) {
     const { hostname } = data;
 
     if (!hostname) {
-      this.logger.error(
-        'Publisher hostname is required',
-        'Create Publisher',
-        this.createPublisher.name,
-      );
+      this.logger.error('Publisher hostname is required');
       return;
     }
 

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { LoggerModule } from '@crawl-web-api/module-log/logs.module';
+import { LoggerModule } from '@crawl-web-api/module-log/logger.module';
 import { Apartment } from '@crawl-web-api/entities';
 import { ApartmentController } from './apartment.controller';
 import { ApartmentService } from './apartment.service';

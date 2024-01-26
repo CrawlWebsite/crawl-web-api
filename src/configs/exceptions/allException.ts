@@ -1,3 +1,4 @@
+import NestjsLoggerServiceAdapter from '@crawl-web-api/module-log/nestjsLoggerServiceAdapter';
 import {
   ExceptionFilter,
   Catch,
@@ -8,12 +9,10 @@ import {
 import { HttpAdapterHost } from '@nestjs/core';
 import { RpcException } from '@nestjs/microservices';
 
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
-
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   constructor(
-    private logger: CustomLogger,
+    private logger: NestjsLoggerServiceAdapter,
     private readonly httpAdapterHost: HttpAdapterHost,
   ) {}
 

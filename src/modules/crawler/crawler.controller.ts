@@ -15,7 +15,7 @@ import { IConfig } from 'config';
 // Service
 import { CONFIG } from '@crawl-web-api/module-config/config.provider';
 import { KafkaService } from '@crawl-web-api/module-kafka/kafka.service';
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 import { JwtAuthGuard } from '@crawl-web-api/module-auth/guard';
 import { CrawlerService } from './crawler.service';
 
@@ -49,10 +49,7 @@ export class CrawlerController extends BaseController {
     @Req() request,
     @Query() queries: GetCrawlProcessByUserDto,
   ) {
-    this.logger.log(
-      `Get crawler processes by user`,
-      this.getCrawlerProcessesByUser.name,
-    );
+    this.logger.info(`Get crawler processes by user`);
 
     const user = request.user;
 
@@ -73,10 +70,7 @@ export class CrawlerController extends BaseController {
     @Param() params: { crawlerProcessId: number },
     @Query() queries: GetSubCrawlProcessByAdminDto,
   ) {
-    this.logger.log(
-      `Get crawler sub processes by user ${queries}`,
-      this.getCrawlerProcessesByUser.name,
-    );
+    this.logger.info(`Get crawler sub processes by user ${queries}`);
 
     const user = request.user;
     const { crawlerProcessId } = params;
@@ -101,7 +95,7 @@ export class CrawlerController extends BaseController {
   @UseGuards(JwtAuthGuard)
   @Post('/crawler-process')
   async crawlRegister(@Req() request, @Body() data: RegisterCrawlProcessDto) {
-    this.logger.log(`Crawl registration ${data}`, this.crawlRegister.name);
+    this.logger.info(`Crawl registration ${data}`);
     const { user } = request;
 
     const newCrawlProcess = await this.crawlerService.registerCrawlProcess(

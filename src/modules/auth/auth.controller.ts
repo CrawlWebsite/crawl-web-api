@@ -28,6 +28,7 @@ import { JwtRefreshGuard } from './guard/jwtRefresh.guard';
 
 // Entity
 import { User } from '@crawl-web-api/entities';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -36,6 +37,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly usersService: UserService,
     @Inject(CONFIG) private readonly configService: IConfig,
+    private readonly logger: CustomLogger,
   ) {}
 
   @Post('register')
@@ -87,6 +89,9 @@ export class AuthController {
       accessTokenData.cookie,
       refreshTokenData.cookie,
     ]);
+
+    this.logger.info('Login successful');
+
     return user;
   }
 

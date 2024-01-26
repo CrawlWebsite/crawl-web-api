@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import CustomLogger from '@crawl-web-api/module-log/customLogger';
+import { CustomLogger } from '@crawl-web-api/module-log/customLogger';
 import { SaleCreateDto } from './dto/saleCreate.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Sale } from '@crawl-web-api/entities';
@@ -12,19 +12,13 @@ export class SaleService {
     private readonly logger: CustomLogger,
     @InjectRepository(Sale)
     private saleRepository: Repository<Sale>,
-  ) {
-    this.logger.setContext(SaleService.name);
-  }
+  ) {}
 
   async upsertSale(data: SaleCreateDto) {
     const { phoneNumber } = data;
 
     if (!phoneNumber) {
-      this.logger.error(
-        'Sale phone number is required',
-        'Upsert Sale',
-        this.upsertSale.name,
-      );
+      this.logger.error('Sale phone number is required');
       return;
     }
 

@@ -1,5 +1,9 @@
 env: NODE_ENV
 
+context:
+  organization: ORGANIZATION
+  app: APP
+
 server:
   host: SERVER_HOST
   port: SERVER_PORT
