@@ -26,7 +26,6 @@ import { LocalStorageModule } from '@crawl-web-api/module-local-storage/localSto
         },
       },
     }),
-    TypeOrmModule.forFeature([Log]),
   ],
   providers: [
     {

@@ -1,3 +1,4 @@
+import { Roles } from '@crawl-web-api/entities';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
@@ -7,7 +8,6 @@ import {
   IsArray,
   IsEnum,
 } from 'class-validator';
-import { Roles } from 'src/entities/role.entity';
 
 export class CreateUserDto {
   @IsEmail()

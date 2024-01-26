@@ -98,7 +98,7 @@ export class CrawlerController extends BaseController {
     this.logger.info(`Crawl registration ${data}`);
     const { user } = request;
 
-    const newCrawlProcess = await this.crawlerService.registerCrawler(
+    const newCrawlProcess = await this.crawlerService.registerCrawlProcess(
       user?.id,
       data,
     );

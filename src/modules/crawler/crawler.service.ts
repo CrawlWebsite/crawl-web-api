@@ -122,7 +122,7 @@ export class CrawlerService extends BaseService {
     return crawlProcess;
   }
 
-  async registerCrawler(ownerId: number, data: RegisterCrawlProcessDto) {
+  async registerCrawlProcess(ownerId: number, data: RegisterCrawlProcessDto) {
     const { url, startPage, endPage } = data;
 
     const owner = await this.userService.getById(ownerId, {
